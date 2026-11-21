@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE JANARAL TRADE</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px 5%;background:#111c2e;border-bottom:1px solid #26364d}
+h1{margin:0;color:#35d49a}
+header p{color:#9aa9bd;margin-bottom:0}
+main{padding:25px 5%}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.card{background:#152238;padding:22px;border:1px solid #26364d;border-radius:12px}
+.card p{color:#9aa9bd;margin:0}
+.card h2{margin-bottom:0;color:#35d49a}
+section{background:#152238;padding:22px;margin-top:22px;border-radius:12px}
+input,select,button{padding:12px;border-radius:7px;border:1px solid #35465e;background:#0b1220;color:white;margin:5px}
+button{background:#15966b;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #35465e}
+.wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<header>
+<h1>THE JANARAL TRADE</h1>
+<p>Professional Trading Journal & Analytics</p>
+</header>
+<main>
+<h2>Dashboard</h2>
+<div class="cards">
+<div class="card"><p>Total Trades</p><h2 id="total">0</h2></div>
+<div class="card"><p>Winning Trades</p><h2 id="wins">0</h2></div>
+<div class="card"><p>Win Rate</p><h2 id="rate">0%</h2></div>
+<div class="card"><p>Net P&L</p><h2 id="pnl">₹0</h2></div>
+</div>
+
+<section>
+<h2>Add New Trade</h2>
+<form id="tradeForm">
+<input type="date" id="date" required>
+<select id="setup">
+<option>9:20</option><option>MS1</option>
+<option>MS2</option><option>JD</option>
+</select>
+<input type="text" id="index" value="SENSEX" required>
+<input type="number" id="entry" placeholder="Entry Price" step="any" required>
+<input type="number" id="exit" placeholder="Exit Price" step="any" required>
+<input type="number" id="qty" placeholder="Quantity" required>
+<button type="submit">Save Trade</button>
+</form>
+</section>
+
+<section>
+<h2>Trading Journal</h2>
+<div class="wrap">
+<table>
+<thead><tr><th>Date</th><th>Index</th><th>Setup</th><th>Entry</th><th>Exit</th><th>Qty</th><th>P&L</th><th>Result</th></tr></thead>
+<tbody id="tradeRows"></tbody>
+</table>
+</div>
+</section>
+</main>
+<script>
+let trades=JSON.parse(localStorage.getItem("janaralTrades")||"[]");
+function update(){
+document.getElementById("total").textContent=trades.length;
+let wins=trades.filter(t=>t.pnl>0).length;
+let net=trades.reduce((s,t)=>s+t.pnl,0);
+document.getElementById("wins").textContent=wins;
+document.getElementById("rate").textContent=(trades.length?(wins/trades.length*100):0).toFixed(1)+"%";
+document.getElementById("pnl").textContent="₹"+net.toFixed(2);
+document.getElementById("tradeRows").innerHTML=trades.map(t=>`<tr><td>${t.date}</td><td>${t.index}</td><td>${t.setup}</td><td>${t.entry}</td><td>${t.exit}</td><td>${t.qty}</td><td>₹${t.pnl.toFixed(2)}</td><td>${t.pnl>0?"WIN":t.pnl<0?"LOSS":"BREAKEVEN"}</td></tr>`).join("");
+}
+document.getElementById("tradeForm").addEventListener("submit",function(e){
+e.preventDefault();
+let entry=Number(document.getElementById("entry").value);
+let exit=Number(document.getElementById("exit").value);
+let qty=Number(document.getElementById("qty").value);
+trades.unshift({
+date:document.getElementById("date").value,
+index:document.getElementById("index").value,
+setup:document.getElementById("setup").value,
+entry,exit,qty,pnl:(exit-entry)*qty
+});
+localStorage.setItem("janaralTrades",JSON.stringify(trades));
+this.reset();
+update();
+});
+update();
+</script>
+</body>
+</html>
