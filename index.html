@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE JANARAL TRADE - Complete Trading Journal</title>
-    <!-- Tailwind CSS -->
     <script src="https://tailwindcss.com"></script>
-    <!-- Supabase JS -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- SheetJS for Excel Download -->
-    <script src="https://jsdelivr.net"></script>
+    <script src="https://unpkg.com"></script>
+    <script src="https://cloudflare.com"></script>
     <style>
         body { background-color: #0b0f19; color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .card { background-color: #131b2e; border: 1px solid #1e293b; border-radius: 12px; }
@@ -23,7 +20,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- AUTH SCREEN (LOGIN / SIGNUP) -->
+    <!-- AUTH SCREEN -->
     <div id="auth-section" class="min-h-screen flex items-center justify-center p-4">
         <div class="card w-full max-w-md p-8 shadow-2xl">
             <div class="text-center mb-8">
@@ -55,7 +52,6 @@
 
     <!-- MAIN APP SCREEN -->
     <div id="app-section" class="hidden flex-1 flex flex-col">
-        <!-- Navbar -->
         <header class="bg-[#131b2e] border-b border-slate-800 px-4 py-3 sticky top-0 z-30">
             <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -63,7 +59,6 @@
                     <span id="user-email-badge" class="hidden md:inline-block text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full"></span>
                 </div>
 
-                <!-- Main Navigation: Separate Dashboard & Trade Entry -->
                 <div class="flex items-center gap-2 bg-slate-900 p-1 rounded-lg">
                     <button id="nav-dashboard" onclick="switchPage('dashboard')" class="px-4 py-2 rounded-md text-sm tab-active transition">
                         📊 Dashboards
@@ -84,10 +79,8 @@
             </div>
         </header>
 
-        <!-- PAGE 1: 3 SEPARATE DASHBOARDS -->
+        <!-- PAGE 1: DASHBOARDS -->
         <main id="page-dashboard" class="max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
-            
-            <!-- 3 Market Dashboard Selector -->
             <div class="flex border-b border-slate-800 gap-6 overflow-x-auto">
                 <button onclick="selectMarketDashboard('Indian Market')" id="tab-indian" class="pb-3 text-base market-active whitespace-nowrap">
                     🇮🇳 Indian Market (NIFTY / SENSEX)
@@ -100,7 +93,6 @@
                 </button>
             </div>
 
-            <!-- Date Filter Bar -->
             <div class="card p-4 flex flex-wrap items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-3">
                     <label class="text-sm text-slate-400 font-medium">Filter by Date:</label>
@@ -112,7 +104,6 @@
                 <div id="selected-date-info" class="text-sm font-semibold text-blue-400"></div>
             </div>
 
-            <!-- Summary KPI Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="card p-5">
                     <p class="text-xs text-slate-400 uppercase">Net Profit / Loss</p>
@@ -132,9 +123,7 @@
                 </div>
             </div>
 
-            <!-- Setup-wise & Date-wise Breakdown -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Setup-Wise Profit & Loss -->
                 <div class="card p-5">
                     <h3 class="text-lg font-bold text-white mb-4">📌 Setup-Wise Profit & Loss</h3>
                     <div class="overflow-x-auto">
@@ -152,7 +141,6 @@
                     </div>
                 </div>
 
-                <!-- Date-Wise Trading Summary (Kis din trade kiya) -->
                 <div class="card p-5">
                     <h3 class="text-lg font-bold text-white mb-4">📅 Date-Wise Trading Summary</h3>
                     <div class="overflow-x-auto max-h-72 overflow-y-auto">
@@ -170,6 +158,14 @@
                 </div>
             </div>
 
-            <!-- Detailed Trade History Table -->
             <div class="card p-5">
                 <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white">📋 Trade History (<span id="history-market-title">Indian Market</span>)</h3>
+                    <button onclick="switchPage('entry')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-lg">
+                        + Add New Trade
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="text-xs text-slate-400 uppercase bg-slate-900/60 border-b border-slate-800">
+                            <tr>
