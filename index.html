@@ -156,8 +156,8 @@
             </div>
 
             <div class="auth-tabs">
-                <button id="btn-show-login" class="btn-primary" onclick="toggleAuthMode('login')">Login</button>
-                <button id="btn-show-signup" class="btn-secondary" onclick="toggleAuthMode('signup')">Create Account</button>
+                <button type="button" id="btn-show-login" class="btn-primary" onclick="toggleAuthMode('login')">Login</button>
+                <button type="button" id="btn-show-signup" class="btn-secondary" onclick="toggleAuthMode('signup')">Create Account</button>
             </div>
 
             <form id="auth-form">
@@ -166,14 +166,14 @@
                     <input type="email" id="auth-email" required placeholder="trader@example.com" class="input-box">
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="auth-password" required placeholder="••••••••" class="input-box">
+                    <label>Password (Minimum 6 characters)</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="input-box">
                 </div>
                 <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%; padding: 12px;">
                     Login to Dashboard
                 </button>
             </form>
-            <p id="auth-message" style="text-align: center; font-size: 13px; margin-top: 14px; color: #fbbf24;"></p>
+            <p id="auth-message" style="text-align: center; font-size: 13px; margin-top: 14px; color: #fbbf24; word-break: break-word;"></p>
         </div>
     </div>
 
@@ -218,4 +218,3 @@
                     <div class="kpi-title">Net Profit / Loss</div>
                     <div id="stat-net-pnl" class="kpi-value">0.00</div>
                 </div>
-                <div class="card">
