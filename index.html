@@ -1,97 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THE JANARAL TRADE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:#fff;font-family:Arial,sans-serif}
-header{padding:22px 5%;background:#111c2e;border-bottom:1px solid #26364d}
-h1{margin:0;color:#35d49a}
-header p{color:#9aa9bd;margin-bottom:0}
-main{padding:25px 5%}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
-.card{background:#152238;padding:22px;border:1px solid #26364d;border-radius:12px}
-.card p{color:#9aa9bd;margin:0}
-.card h2{margin-bottom:0;color:#35d49a}
-section{background:#152238;padding:22px;margin-top:22px;border-radius:12px}
-input,select,button{padding:12px;border-radius:7px;border:1px solid #35465e;background:#0b1220;color:white;margin:5px}
-button{background:#15966b;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{padding:12px;text-align:left;border-bottom:1px solid #35465e}
-.wrap{overflow-x:auto}
-</style>
-</head>
+*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#fff;font-family:Arial,sans-serif}header{padding:22px 5%;background:#111c2e;border-bottom:1px solid #26364d}h1{margin:0;color:#35d49a}header p,.muted{color:#9aa9bd}main{padding:25px 5%;max-width:1400px;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}.card,section,.auth{background:#152238;padding:22px;border:1px solid #26364d;border-radius:12px;margin-top:20px}.card p{color:#9aa9bd;margin:0}.card h2{margin-bottom:0;color:#35d49a}input,select,button{padding:12px;border-radius:7px;border:1px solid #35465e;background:#0b1220;color:white;margin:5px;max-width:100%}button{background:#15966b;cursor:pointer;border:0}button.secondary{background:#35465e}.hidden{display:none}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin-top:15px;min-width:850px}th,td{padding:12px;text-align:left;border-bottom:1px solid #35465e}.danger{background:#a33}.notice{padding:12px;margin:10px 5px;border-radius:8px;background:#26364d;color:#fff;white-space:pre-wrap}
+</style></head>
 <body>
-<header>
-<h1>THE JANARAL TRADE</h1>
-<p>Professional Trading Journal & Analytics</p>
-</header>
+<header><h1>THE JANARAL TRADE</h1><p>Professional Trading Journal & Analytics</p></header>
 <main>
-<h2>Dashboard</h2>
-<div class="cards">
-<div class="card"><p>Total Trades</p><h2 id="total">0</h2></div>
-<div class="card"><p>Winning Trades</p><h2 id="wins">0</h2></div>
-<div class="card"><p>Win Rate</p><h2 id="rate">0%</h2></div>
-<div class="card"><p>Net P&L</p><h2 id="pnl">₹0</h2></div>
-</div>
-
-<section>
-<h2>Add New Trade</h2>
-<form id="tradeForm">
-<input type="date" id="date" required>
-<select id="setup">
-<option>9:20</option><option>MS1</option>
-<option>MS2</option><option>JD</option>
-</select>
-<input type="text" id="index" value="SENSEX" required>
-<input type="number" id="entry" placeholder="Entry Price" step="any" required>
-<input type="number" id="exit" placeholder="Exit Price" step="any" required>
-<input type="number" id="qty" placeholder="Quantity" required>
-<button type="submit">Save Trade</button>
-</form>
+<div id="setupNotice" class="notice">Setup required: replace SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in this file with your Supabase project URL and Publishable key.</div>
+<section id="authBox" class="auth">
+<h2 id="authTitle">Login to your account</h2>
+<input id="email" type="email" placeholder="Email address" autocomplete="email" required>
+<input id="password" type="password" placeholder="Password (minimum 6 characters)" autocomplete="current-password" required>
+<div><button id="authButton" type="button">Login</button><button class="secondary" id="switchAuth" type="button">Create new account</button></div>
+<p class="muted">Signup ke baad email confirmation aa sakta hai. Apna password kisi ke saath share na karein.</p>
+<div id="authMessage" class="notice hidden"></div>
 </section>
-
-<section>
-<h2>Trading Journal</h2>
-<div class="wrap">
-<table>
-<thead><tr><th>Date</th><th>Index</th><th>Setup</th><th>Entry</th><th>Exit</th><th>Qty</th><th>P&L</th><th>Result</th></tr></thead>
-<tbody id="tradeRows"></tbody>
-</table>
-</div>
-</section>
-</main>
-  
+<div id="app" class="hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Dashboard</h2><div><span id="userEmail" class="muted"></span> <button id="logout" class="secondary">Logout</button></div></div>
+<div class="cards"><div class="card"><p>Total Trades</p><h2 id="total">0</h2></div><div class="card"><p>Winning Trades</p><h2 id="wins">0</h2></div><div class="card"><p>Win Rate</p><h2 id="rate">0%</h2></div><div class="card"><p>Net P&amp;L</p><h2 id="pnl">₹0</h2></div></div>
+<section><h2>Add New Trade</h2><form id="tradeForm" class="grid">
+<input type="date" id="date" required><select id="setup"><option>9:20</option><option>MS1</option><option>MS2</option><option>JD</option></select>
+<input type="text" id="index" value="SENSEX" placeholder="Index" required><input type="time" id="entryTime" aria-label="Entry Time"><input type="time" id="exitTime" aria-label="Exit Time">
+<input type="number" id="entry" placeholder="Entry Price" step="any" required><input type="number" id="exit" placeholder="Exit Price" step="any" required><input type="number" id="qty" placeholder="Quantity" min="1" step="1" required><input type="number" id="marketOp" placeholder="MARKET-OP (Gap points)" step="any">
+<button type="submit">Save Trade</button></form><div id="tradeMessage" class="notice hidden"></div></section>
+<section><h2>Trading Journal</h2><div class="wrap"><table><thead><tr><th>Date</th><th>Index</th><th>Setup</th><th>Entry</th><th>Exit</th><th>Qty</th><th>MARKET-OP</th><th>P&amp;L</th><th>Result</th><th>Action</th></tr></thead><tbody id="tradeRows"></tbody></table></div></section>
+</div></main>
 <script>
-let trades=JSON.parse(localStorage.getItem("janaralTrades")||"[]");
-function update(){
-document.getElementById("total").textContent=trades.length;
-let wins=trades.filter(t=>t.pnl>0).length;
-let net=trades.reduce((s,t)=>s+t.pnl,0);
-document.getElementById("wins").textContent=wins;
-document.getElementById("rate").textContent=(trades.length?(wins/trades.length*100):0).toFixed(1)+"%";
-document.getElementById("pnl").textContent="₹"+net.toFixed(2);
-document.getElementById("tradeRows").innerHTML=trades.map(t=>`<tr><td>${t.date}</td><td>${t.index}</td><td>${t.setup}</td><td>${t.entry}</td><td>${t.exit}</td><td>${t.qty}</td><td>₹${t.pnl.toFixed(2)}</td><td>${t.pnl>0?"WIN":t.pnl<0?"LOSS":"BREAKEVEN"}</td></tr>`).join("");
-}
-document.getElementById("tradeForm").addEventListener("submit",function(e){
-e.preventDefault();
-let entry=Number(document.getElementById("entry").value);
-let exit=Number(document.getElementById("exit").value);
-let qty=Number(document.getElementById("qty").value);
-trades.unshift({
-date:document.getElementById("date").value,
-index:document.getElementById("index").value,
-setup:document.getElementById("setup").value,
-entry,exit,qty,pnl:(exit-entry)*qty
-});
-localStorage.setItem("janaralTrades",JSON.stringify(trades));
-this.reset();
-update();
-});
-update();
-</script>
-</body>
-</html>
+// Paste your Supabase project URL and Publishable key between the quotes below.
+const SUPABASE_URL = 'https://jhououcvowcblrpnvdqw.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
+const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_');
+const $ = id => document.getElementById(id);
+let client, currentUser, isSignup=false, trades=[];
+function message(id,text){$(id).textContent=text;$(id).classList.remove('hidden')}
+function hide(id){$(id).classList.add('hidden')}
+function showApp(user){currentUser=user;$('authBox').classList.add('hidden');$('app').classList.remove('hidden');$('userEmail').textContent=user.email||'';loadTrades()}
+function showAuth(){$('app').classList.add('hidden');$('authBox').classList.remove('hidden')}
+function render(){const wins=trades.filter(t=>Number(t.gross_pnl)>0).length;const net=trades.reduce((s,t)=>s+Number(t.gross_pnl||0),0);$('total').textContent=trades.length;$('wins').textContent=wins;$('rate').textContent=(trades.length?wins/trades.length*100:0).toFixed(1)+'%';$('pnl').textContent='₹'+net.toFixed(2);$('tradeRows').innerHTML=trades.map(t=>`<tr><td>${t.trade_date||''}</td><td>${t.index_name||''}</td><td>${t.setup||''}</td><td>${t.entry_price}</td><td>${t.exit_price}</td><td>${t.quantity}</td><td>${t.market_op??''}</td><td>₹${Number(t.gross_pnl||0).toFixed(2)}</td><td>${t.result||''}</td><td><button class="danger" data-delete="${t.id}">Delete</button></td></tr>`).join('')}
+async function loadTrades(){const {data,error}=await client.from('trades').select('*').order('trade_date',{ascending:false}).order('created_at',{ascending:false});if(error){message('tradeMessage','Trades load nahi hue: '+error.message);return}trades=data||[];render()}
+$('switchAuth').onclick=()=>{isSignup=!isSignup;$('authTitle').textContent=isSignup?'Create your account':'Login to your account';$('authButton').textContent=isSignup?'Sign up':'Login';$('switchAuth').textContent=isSignup?'Back to Login':'Create new account';hide('authMessage')};
+$('authButton').onclick=async()=>{hide('authMessage');const email=$('email').value.trim(),password=$('password').value;if(!email||password.length<6){message('authMessage','Email daalein aur password kam se kam 6 characters ka rakhein.');return}const result=isSignup?await client.auth.signUp({email,password}):await client.auth.signInWithPassword({email,password});if(result.error){message('authMessage',result.error.message);return}if(isSignup&&!result.data.session){message('authMessage','Signup ho gaya. Email check karke confirmation link par click karein, phir Login karein.');return}if(result.data.user)showApp(result.data.user)};
+$('logout').onclick=async()=>{await client.auth.signOut();currentUser=null;trades=[];showAuth()};
+$('tradeForm').onsubmit=async e=>{e.preventDefault();hide('tradeMessage');const entry=Number($('entry').value),exit=Number($('exit').value),qty=Number($('qty').value),pnl=(exit-entry)*qty;const date=$('date').value;const day=date?new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'}):null;const row={user_id:currentUser.id,trade_date:date,day,index_name:$('index').value.trim(),setup:$('setup').value,entry_time:$('entryTime').value||null,exit_time:$('exitTime').value||null,entry_price:entry,exit_price:exit,quantity:qty,gross_pnl:pnl,profit:Math.max(pnl,0),loss:Math.max(-pnl,0),result:pnl>0?'WIN':pnl<0?'LOSS':'BREAKEVEN',market_op:$('marketOp').value===''?null:Number($('marketOp').value)};const {error}=await client.from('trades').insert(row);if(error){message('tradeMessage','Save nahi hua: '+error.message);return}e.target.reset();$('index').value='SENSEX';message('tradeMessage','Trade save ho gaya!');await loadTrades()};
+$('tradeRows').onclick=async e=>{const id=e.target.dataset.delete;if(!id)return;if(!confirm('Kya aap ye trade delete karna chahte hain?'))return;const {error}=await client.from('trades').delete().eq('id',id).eq('user_id',currentUser.id);if(error){message('tradeMessage','Delete nahi hua: '+error.message);return}await loadTrades()};
+(async()=>{if(!configured){$('authButton').disabled=true;message('authMessage','Pehle file mein Supabase URL aur Publishable key paste karni hogi.');return}client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data}=await client.auth.getSession();if(data.session)showApp(data.session.user);else showAuth();client.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else showAuth()})})();
+</script></body></html>
