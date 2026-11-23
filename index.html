@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE JANARAL TRADE - Trading Journal</title>
-    <script src="https://jsdelivr.net"></script>
-    <script src="https://jsdelivr.net"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -52,20 +50,12 @@
         .btn-secondary { background-color: #1e293b; color: #cbd5e1; }
         .btn-secondary:hover { background-color: #334155; }
 
-        /* Auth Page */
-        .auth-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+        .auth-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .auth-box { width: 100%; max-width: 420px; padding: 32px; }
         .auth-tabs { display: flex; background: #0b0f19; padding: 4px; border-radius: 8px; margin: 20px 0; }
         .auth-tabs button { flex: 1; padding: 8px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .form-group { margin-bottom: 16px; }
 
-        /* Navbar */
         .navbar {
             background-color: #131b2e;
             border-bottom: 1px solid #1e293b;
@@ -83,59 +73,24 @@
         .badge-user { font-size: 12px; background: #1e293b; color: #cbd5e1; padding: 4px 10px; border-radius: 20px; margin-left: 8px; }
         .nav-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-        /* Main Layout */
         .container { max-width: 1280px; margin: 0 auto; padding: 24px 16px; }
-        .market-tabs {
-            display: flex;
-            gap: 12px;
-            border-bottom: 1px solid #1e293b;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-        .market-tab {
-            background: #131b2e;
-            color: #94a3b8;
-            border: 1px solid #1e293b;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        .market-tab.active {
-            background: #2563eb;
-            color: #ffffff;
-            border-color: #3b82f6;
-        }
+        .market-tabs { display: flex; gap: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 20px; overflow-x: auto; }
+        .market-tab { background: #131b2e; color: #94a3b8; border: 1px solid #1e293b; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 14px; white-space: nowrap; }
+        .market-tab.active { background: #2563eb; color: #ffffff; border-color: #3b82f6; }
 
-        /* Grids */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .kpi-title { font-size: 12px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
         .kpi-value { font-size: 28px; font-weight: 800; margin-top: 6px; }
 
-        .two-col-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
+        .two-col-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
         .form-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
         .form-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 16px; }
 
-        /* Tables */
         .table-wrap { overflow-x: auto; margin-top: 12px; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
         th { color: #94a3b8; font-size: 12px; text-transform: uppercase; padding: 10px 12px; border-bottom: 1px solid #1e293b; background: #0f1626; }
         td { padding: 12px; border-bottom: 1px solid #1e293b; white-space: nowrap; }
 
-        /* Colors */
         .text-green { color: #10b981 !important; }
         .text-red { color: #ef4444 !important; }
         .row-profit { background-color: rgba(16, 185, 129, 0.12); }
@@ -160,19 +115,19 @@
                 <button type="button" id="btn-show-signup" class="btn-secondary" onclick="toggleAuthMode('signup')">Create Account</button>
             </div>
 
-            <form id="auth-form">
+            <div id="auth-box-form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="auth-email" required placeholder="trader@example.com" class="input-box">
+                    <input type="email" id="auth-email" placeholder="trader@example.com" class="input-box">
                 </div>
                 <div class="form-group">
                     <label>Password (Minimum 6 characters)</label>
-                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="input-box">
+                    <input type="password" id="auth-password" placeholder="••••••••" class="input-box">
                 </div>
-                <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%; padding: 12px;">
+                <button type="button" id="auth-submit-btn" onclick="handleAuth()" class="btn btn-primary" style="width: 100%; padding: 12px;">
                     Login to Dashboard
                 </button>
-            </form>
+            </div>
             <p id="auth-message" style="text-align: center; font-size: 13px; margin-top: 14px; color: #fbbf24; word-break: break-word;"></p>
         </div>
     </div>
@@ -186,29 +141,29 @@
             </div>
 
             <div class="nav-group">
-                <button id="nav-dashboard" class="btn btn-primary" onclick="switchPage('dashboard')">📊 Dashboards</button>
-                <button id="nav-entry" class="btn btn-secondary" onclick="switchPage('entry')">➕ Trade Entry</button>
+                <button type="button" id="nav-dashboard" class="btn btn-primary" onclick="switchPage('dashboard')">📊 Dashboards</button>
+                <button type="button" id="nav-entry" class="btn btn-secondary" onclick="switchPage('entry')">➕ Trade Entry</button>
             </div>
 
             <div class="nav-group">
-                <button class="btn btn-success" onclick="exportToExcel()">📥 Excel Download</button>
-                <button class="btn btn-danger" onclick="logout()">Logout</button>
+                <button type="button" class="btn btn-success" onclick="exportToExcel()">📥 Excel Download</button>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
             </div>
         </header>
 
         <!-- PAGE A: 3 DASHBOARDS -->
         <main id="page-dashboard" class="container">
             <div class="market-tabs">
-                <button id="tab-indian" class="market-tab active" onclick="selectMarketDashboard('Indian Market')">🇮🇳 Indian Market (NIFTY / SENSEX)</button>
-                <button id="tab-bitcoin" class="market-tab" onclick="selectMarketDashboard('Bitcoin')">₿ Bitcoin (GOLDEN Setup)</button>
-                <button id="tab-gold" class="market-tab" onclick="selectMarketDashboard('Gold')">🪙 Gold Dashboard</button>
+                <button type="button" id="tab-indian" class="market-tab active" onclick="selectMarketDashboard('Indian Market')">🇮🇳 Indian Market (NIFTY / SENSEX)</button>
+                <button type="button" id="tab-bitcoin" class="market-tab" onclick="selectMarketDashboard('Bitcoin')">₿ Bitcoin (GOLDEN Setup)</button>
+                <button type="button" id="tab-gold" class="market-tab" onclick="selectMarketDashboard('Gold')">🪙 Gold Dashboard</button>
             </div>
 
             <div class="card filter-bar">
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <label style="margin: 0; font-size: 14px;">Filter by Date:</label>
                     <input type="date" id="filter-date" onchange="renderDashboard()" class="input-box" style="width: auto; margin: 0;">
-                    <button class="btn btn-secondary" onclick="clearDateFilter()">Show All Dates</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearDateFilter()">Show All Dates</button>
                 </div>
                 <div id="selected-date-info" style="color: #60a5fa; font-weight: 700; font-size: 14px;"></div>
             </div>
@@ -218,3 +173,17 @@
                     <div class="kpi-title">Net Profit / Loss</div>
                     <div id="stat-net-pnl" class="kpi-value">0.00</div>
                 </div>
+                <div class="card">
+                    <div class="kpi-title">Total Trades</div>
+                    <div id="stat-total-trades" class="kpi-value">0</div>
+                </div>
+                <div class="card">
+                    <div class="kpi-title">Win / Loss Count</div>
+                    <div id="stat-win-loss" class="kpi-value">0W / 0L</div>
+                </div>
+                <div class="card">
+                    <div class="kpi-title">Win Accuracy</div>
+                    <div id="stat-win-rate" class="kpi-value" style="color: #60a5fa;">0%</div>
+                </div>
+            </div>
+
