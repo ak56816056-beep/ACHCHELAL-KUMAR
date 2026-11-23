@@ -108,7 +108,7 @@ th,td{padding:10px;border-bottom:1px solid #1e293b;text-align:left;white-space:n
 </div>
 
 <script>
-const URL='https://supabase.co',KEY='sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
+const SB_URL='https://supabase.co',SB_KEY='sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
 let sess=JSON.parse(localStorage.getItem('tjt_s')||'null'),trades=[],mkt='Indian Market',mode='login';
 const $=id=>document.getElementById(id);
 window.onload=()=>{ $('t-date').valueAsDate=new Date(); if(sess&&sess.access_token)startApp(); };
@@ -118,7 +118,7 @@ async function doAuth(){
   if(!email||password.length<6){$('msg').innerText='Enter valid email & 6+ char password';return;}
   $('msg').innerText='Please wait...';
   const ep=mode=='login'?'/auth/v1/token?grant_type=password':'/auth/v1/signup';
-  const r=await fetch(URL+ep,{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+  const r=await fetch(SB_URL+ep,{method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
   const d=await r.json();
   if(!r.ok){$('msg').innerText=d.error_description||d.msg||d.message||'Failed';return;}
   if(d.access_token){sess=d;localStorage.setItem('tjt_s',JSON.stringify(d));startApp();}
@@ -130,7 +130,7 @@ function goPage(p){ $('view-dash').classList.toggle('hidden',p!='dash');$('view-
 function setMkt(m){ mkt=m;$('h-mkt').innerText=m;$('t-ind').className=m=='Indian Market'?'btn blue':'btn';$('t-btc').className=m=='Bitcoin'?'btn blue':'btn';$('t-gld').className=m=='Gold'?'btn blue':'btn';render(); }
 function onMkt(){ const m=$('t-mkt').value,s=$('t-sym'); if(m=='Indian Market'){s.innerHTML='<option>NIFTY</option><option>SENSEX</option>';}else if(m=='Bitcoin'){s.innerHTML='<option>BITCOIN</option>';$('t-setup').value='GOLDEN';}else{s.innerHTML='<option>GOLD</option>';} }
 async function loadT(){
-  const r=await fetch(URL+'/rest/v1/trades?select=*&order=trade_date.desc',{headers:{'apikey':KEY,'Authorization':'Bearer '+sess.access_token}});
+  const r=await fetch(SB_URL+'/rest/v1/trades?select=*&order=trade_date.desc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+sess.access_token}});
   if(r.status==401)return logout();
   const d=await r.json();
   if(!r.ok){alert('Run SQL in Supabase first: '+(d.message||''));return;}
