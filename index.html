@@ -1,51 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE JANARAL TRADE</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#fff;font-family:Arial,sans-serif}header{padding:22px 5%;background:#111c2e;border-bottom:1px solid #26364d}h1{margin:0;color:#35d49a}header p,.muted{color:#9aa9bd}main{padding:25px 5%;max-width:1400px;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}.card,section,.auth{background:#152238;padding:22px;border:1px solid #26364d;border-radius:12px;margin-top:20px}.card p{color:#9aa9bd;margin:0}.card h2{margin-bottom:0;color:#35d49a}input,select,button{padding:12px;border-radius:7px;border:1px solid #35465e;background:#0b1220;color:white;margin:5px;max-width:100%}button{background:#15966b;cursor:pointer;border:0}button.secondary{background:#35465e}.hidden{display:none}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin-top:15px;min-width:850px}th,td{padding:12px;text-align:left;border-bottom:1px solid #35465e}.danger{background:#a33}.notice{padding:12px;margin:10px 5px;border-radius:8px;background:#26364d;color:#fff;white-space:pre-wrap}
-</style></head>
-<body>
-<header><h1>THE JANARAL TRADE</h1><p>Professional Trading Journal & Analytics</p></header>
-<main>
-<div id="setupNotice" class="notice">Setup required: replace SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in this file with your Supabase project URL and Publishable key.</div>
-<section id="authBox" class="auth">
-<h2 id="authTitle">Login to your account</h2>
-<input id="email" type="email" placeholder="Email address" autocomplete="email" required>
-<input id="password" type="password" placeholder="Password (minimum 6 characters)" autocomplete="current-password" required>
-<div><button id="authButton" type="button">Login</button><button class="secondary" id="switchAuth" type="button">Create new account</button></div>
-<p class="muted">Signup ke baad email confirmation aa sakta hai. Apna password kisi ke saath share na karein.</p>
-<div id="authMessage" class="notice hidden"></div>
-</section>
-<div id="app" class="hidden">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Dashboard</h2><div><span id="userEmail" class="muted"></span> <button id="logout" class="secondary">Logout</button></div></div>
-<div class="cards"><div class="card"><p>Total Trades</p><h2 id="total">0</h2></div><div class="card"><p>Winning Trades</p><h2 id="wins">0</h2></div><div class="card"><p>Win Rate</p><h2 id="rate">0%</h2></div><div class="card"><p>Net P&amp;L</p><h2 id="pnl">₹0</h2></div></div>
-<section><h2>Add New Trade</h2><form id="tradeForm" class="grid">
-<input type="date" id="date" required><select id="setup"><option>9:20</option><option>MS1</option><option>MS2</option><option>JD</option></select>
-<input type="text" id="index" value="SENSEX" placeholder="Index" required><input type="time" id="entryTime" aria-label="Entry Time"><input type="time" id="exitTime" aria-label="Exit Time">
-<input type="number" id="entry" placeholder="Entry Price" step="any" required><input type="number" id="exit" placeholder="Exit Price" step="any" required><input type="number" id="qty" placeholder="Quantity" min="1" step="1" required><input type="number" id="marketOp" placeholder="MARKET-OP (Gap points)" step="any">
-<button type="submit">Save Trade</button></form><div id="tradeMessage" class="notice hidden"></div></section>
-<section><h2>Trading Journal</h2><div class="wrap"><table><thead><tr><th>Date</th><th>Index</th><th>Setup</th><th>Entry</th><th>Exit</th><th>Qty</th><th>MARKET-OP</th><th>P&amp;L</th><th>Result</th><th>Action</th></tr></thead><tbody id="tradeRows"></tbody></table></div></section>
-</div></main>
-<script>
-// Paste your Supabase project URL and Publishable key between the quotes below.
-const SUPABASE_URL = 'https://jhououcvowcblrpnvdqw.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
-const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_');
-const $ = id => document.getElementById(id);
-let client, currentUser, isSignup=false, trades=[];
-function message(id,text){$(id).textContent=text;$(id).classList.remove('hidden')}
-function hide(id){$(id).classList.add('hidden')}
-function showApp(user){currentUser=user;$('authBox').classList.add('hidden');$('app').classList.remove('hidden');$('userEmail').textContent=user.email||'';loadTrades()}
-function showAuth(){$('app').classList.add('hidden');$('authBox').classList.remove('hidden')}
-function render(){const wins=trades.filter(t=>Number(t.gross_pnl)>0).length;const net=trades.reduce((s,t)=>s+Number(t.gross_pnl||0),0);$('total').textContent=trades.length;$('wins').textContent=wins;$('rate').textContent=(trades.length?wins/trades.length*100:0).toFixed(1)+'%';$('pnl').textContent='₹'+net.toFixed(2);$('tradeRows').innerHTML=trades.map(t=>`<tr><td>${t.trade_date||''}</td><td>${t.index_name||''}</td><td>${t.setup||''}</td><td>${t.entry_price}</td><td>${t.exit_price}</td><td>${t.quantity}</td><td>${t.market_op??''}</td><td>₹${Number(t.gross_pnl||0).toFixed(2)}</td><td>${t.result||''}</td><td><button class="danger" data-delete="${t.id}">Delete</button></td></tr>`).join('')}
-async function loadTrades(){const {data,error}=await client.from('trades').select('*').order('trade_date',{ascending:false}).order('created_at',{ascending:false});if(error){message('tradeMessage','Trades load nahi hue: '+error.message);return}trades=data||[];render()}
-$('switchAuth').onclick=()=>{isSignup=!isSignup;$('authTitle').textContent=isSignup?'Create your account':'Login to your account';$('authButton').textContent=isSignup?'Sign up':'Login';$('switchAuth').textContent=isSignup?'Back to Login':'Create new account';hide('authMessage')};
-$('authButton').onclick=async()=>{hide('authMessage');const email=$('email').value.trim(),password=$('password').value;if(!email||password.length<6){message('authMessage','Email daalein aur password kam se kam 6 characters ka rakhein.');return}const result=isSignup?await client.auth.signUp({email,password}):await client.auth.signInWithPassword({email,password});if(result.error){message('authMessage',result.error.message);return}if(isSignup&&!result.data.session){message('authMessage','Signup ho gaya. Email check karke confirmation link par click karein, phir Login karein.');return}if(result.data.user)showApp(result.data.user)};
-$('logout').onclick=async()=>{await client.auth.signOut();currentUser=null;trades=[];showAuth()};
-$('tradeForm').onsubmit=async e=>{e.preventDefault();hide('tradeMessage');const entry=Number($('entry').value),exit=Number($('exit').value),qty=Number($('qty').value),pnl=(exit-entry)*qty;const date=$('date').value;const day=date?new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'}):null;const row={user_id:currentUser.id,trade_date:date,day,index_name:$('index').value.trim(),setup:$('setup').value,entry_time:$('entryTime').value||null,exit_time:$('exitTime').value||null,entry_price:entry,exit_price:exit,quantity:qty,gross_pnl:pnl,profit:Math.max(pnl,0),loss:Math.max(-pnl,0),result:pnl>0?'WIN':pnl<0?'LOSS':'BREAKEVEN',market_op:$('marketOp').value===''?null:Number($('marketOp').value)};const {error}=await client.from('trades').insert(row);if(error){message('tradeMessage','Save nahi hua: '+error.message);return}e.target.reset();$('index').value='SENSEX';message('tradeMessage','Trade save ho gaya!');await loadTrades()};
-$('tradeRows').onclick=async e=>{const id=e.target.dataset.delete;if(!id)return;if(!confirm('Kya aap ye trade delete karna chahte hain?'))return;const {error}=await client.from('trades').delete().eq('id',id).eq('user_id',currentUser.id);if(error){message('tradeMessage','Delete nahi hua: '+error.message);return}await loadTrades()};
-(async()=>{if(!configured){$('authButton').disabled=true;message('authMessage','Pehle file mein Supabase URL aur Publishable key paste karni hogi.');return}client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data}=await client.auth.getSession();if(data.session)showApp(data.session.user);else showAuth();client.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else showAuth()})})();
-</script></body></html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE JANARAL TRADE - Complete Trading Journal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://tailwindcss.com"></script>
+    <!-- Supabase JS -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- SheetJS for Excel Download -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body { background-color: #0b0f19; color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { background-color: #131b2e; border: 1px solid #1e293b; border-radius: 12px; }
+        .input-box { background-color: #0b0f19; border: 1px solid #334155; color: #fff; border-radius: 8px; padding: 10px 12px; width: 100%; }
+        .input-box:focus { outline: none; border-color: #3b82f6; }
+        .tab-active { background-color: #2563eb; color: #ffffff; font-weight: 600; }
+        .tab-inactive { background-color: #1e293b; color: #94a3b8; }
+        .market-active { border-bottom: 3px solid #3b82f6; color: #ffffff; font-weight: 700; }
+        .market-inactive { color: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- AUTH SCREEN (LOGIN / SIGNUP) -->
+    <div id="auth-section" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card w-full max-w-md p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-blue-500 tracking-wide">THE JANARAL TRADE</h1>
+                <p class="text-slate-400 text-sm mt-2">Personal Trading Journal & Analytics</p>
+            </div>
+
+            <div class="flex mb-6 bg-slate-900 p-1 rounded-lg">
+                <button id="btn-show-login" onclick="toggleAuthMode('login')" class="w-1/2 py-2 rounded-md tab-active text-sm">Login</button>
+                <button id="btn-show-signup" onclick="toggleAuthMode('signup')" class="w-1/2 py-2 rounded-md tab-inactive text-sm">Create Account</button>
+            </div>
+
+            <form id="auth-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+                    <input type="email" id="auth-email" required placeholder="trader@example.com" class="input-box">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" class="input-box">
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                    Login to Dashboard
+                </button>
+            </form>
+            <p id="auth-message" class="text-center text-sm mt-4 text-amber-400"></p>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="app-section" class="hidden flex-1 flex flex-col">
+        <!-- Navbar -->
+        <header class="bg-[#131b2e] border-b border-slate-800 px-4 py-3 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl font-extrabold text-blue-500">THE JANARAL TRADE</span>
+                    <span id="user-email-badge" class="hidden md:inline-block text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full"></span>
+                </div>
+
+                <!-- Main Navigation: Separate Dashboard & Trade Entry -->
+                <div class="flex items-center gap-2 bg-slate-900 p-1 rounded-lg">
+                    <button id="nav-dashboard" onclick="switchPage('dashboard')" class="px-4 py-2 rounded-md text-sm tab-active transition">
+                        📊 Dashboards
+                    </button>
+                    <button id="nav-entry" onclick="switchPage('entry')" class="px-4 py-2 rounded-md text-sm tab-inactive transition">
+                        ➕ Trade Entry
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">
+                        📥 Excel Download
+                    </button>
+                    <button onclick="logout()" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white text-xs font-semibold px-3 py-2 rounded-lg transition">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE 1: 3 SEPARATE DASHBOARDS -->
+        <main id="page-dashboard" class="max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+            
+            <!-- 3 Market Dashboard Selector -->
+            <div class="flex border-b border-slate-800 gap-6 overflow-x-auto">
+                <button onclick="selectMarketDashboard('Indian Market')" id="tab-indian" class="pb-3 text-base market-active whitespace-nowrap">
+                    🇮🇳 Indian Market (NIFTY / SENSEX)
+                </button>
+                <button onclick="selectMarketDashboard('Bitcoin')" id="tab-bitcoin" class="pb-3 text-base market-inactive whitespace-nowrap">
+                    ₿ Bitcoin (GOLDEN Setup)
+                </button>
+                <button onclick="selectMarketDashboard('Gold')" id="tab-gold" class="pb-3 text-base market-inactive whitespace-nowrap">
+                    🪙 Gold Dashboard
+                </button>
+            </div>
+
+            <!-- Date Filter Bar -->
+            <div class="card p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <label class="text-sm text-slate-400 font-medium">Filter by Date:</label>
+                    <input type="date" id="filter-date" onchange="renderDashboard()" class="input-box !w-auto text-sm">
+                    <button onclick="clearDateFilter()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg text-slate-300">
+                        Show All Dates
+                    </button>
+                </div>
+                <div id="selected-date-info" class="text-sm font-semibold text-blue-400"></div>
+            </div>
+
+            <!-- Summary KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card p-5">
+                    <p class="text-xs text-slate-400 uppercase">Net Profit / Loss</p>
+                    <h2 id="stat-net-pnl" class="text-2xl font-extrabold mt-1">0.00</h2>
+                </div>
+                <div class="card p-5">
+                    <p class="text-xs text-slate-400 uppercase">Total Trades</p>
+                    <h2 id="stat-total-trades" class="text-2xl font-extrabold text-white mt-1">0</h2>
+                </div>
+                <div class="card p-5">
+                    <p class="text-xs text-slate-400 uppercase">Win / Loss Count</p>
+                    <h2 id="stat-win-loss" class="text-2xl font-extrabold text-slate-200 mt-1">0W / 0L</h2>
+                </div>
+                <div class="card p-5">
+                    <p class="text-xs text-slate-400 uppercase">Win Accuracy</p>
+                    <h2 id="stat-win-rate" class="text-2xl font-extrabold text-blue-400 mt-1">0%</h2>
+                </div>
+            </div>
+
+            <!-- Setup-wise & Date-wise Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Setup-Wise Profit & Loss -->
+                <div class="card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">📌 Setup-Wise Profit & Loss</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-400 border-b border-slate-800">
+                                <tr>
+                                    <th class="pb-2">Setup Name</th>
+                                    <th class="pb-2">Trades</th>
+                                    <th class="pb-2">Win %</th>
+                                    <th class="pb-2 text-right">Net P&L</th>
+                                </tr>
+                            </thead>
+                            <tbody id="setup-wise-body" class="divide-y divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Date-Wise Trading Summary (Kis din trade kiya) -->
+                <div class="card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">📅 Date-Wise Trading Summary</h3>
+                    <div class="overflow-x-auto max-h-72 overflow-y-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-400 border-b border-slate-800">
+                                <tr>
+                                    <th class="pb-2">Date (Day)</th>
+                                    <th class="pb-2">Trades</th>
+                                    <th class="pb-2 text-right">Day P&L</th>
+                                </tr>
+                            </thead>
+                            <tbody id="date-wise-body" class="divide-y divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Trade History Table -->
+            <div class="card p-5">
+                <div class="flex items-center justify-between mb-4">
