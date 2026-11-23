@@ -35,7 +35,7 @@ th,td{padding:10px;border-bottom:1px solid #1e293b;text-align:left;white-space:n
     <label>Email</label><input type="email" id="email" class="inp" placeholder="trader@example.com">
     <label>Password (6+ chars)</label><input type="password" id="pass" class="inp" placeholder="******">
     <button type="button" id="auth-btn" class="btn blue" style="width:100%;margin-top:16px" onclick="doAuth()">Login to Dashboard</button>
-    <p id="msg" style="color:#fbbf24;font-size:13px;margin-top:12px;text-align:center"></p>
+    <div id="msg" style="color:#fbbf24;font-size:13px;margin-top:12px;text-align:center;background:#0b0f19;padding:8px;border-radius:6px;min-height:36px">Status: Ready</div>
   </div>
 </div>
 
@@ -108,35 +108,62 @@ th,td{padding:10px;border-bottom:1px solid #1e293b;text-align:left;white-space:n
 </div>
 
 <script>
-const SB_URL='https://supabase.co',SB_KEY='sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
-let sess=JSON.parse(localStorage.getItem('tjt_s')||'null'),trades=[],mkt='Indian Market',mode='login';
-const $=id=>document.getElementById(id);
-window.onload=()=>{ $('t-date').valueAsDate=new Date(); if(sess&&sess.access_token)startApp(); };
-function setMode(m){ mode=m; $('msg').innerText=''; $('m-login').className=m=='login'?'btn blue':'btn'; $('m-signup').className=m=='signup'?'btn blue':'btn'; $('auth-btn').innerText=m=='login'?'Login to Dashboard':'Create Account'; }
-async function doAuth(){
-  const email=$('email').value.trim(),password=$('pass').value;
-  if(!email||password.length<6){$('msg').innerText='Enter valid email & 6+ char password';return;}
-  $('msg').innerText='Please wait...';
-  const ep=mode=='login'?'/auth/v1/token?grant_type=password':'/auth/v1/signup';
-  const r=await fetch(SB_URL+ep,{method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-  const d=await r.json();
-  if(!r.ok){$('msg').innerText=d.error_description||d.msg||d.message||'Failed';return;}
-  if(d.access_token){sess=d;localStorage.setItem('tjt_s',JSON.stringify(d));startApp();}
-  else{$('msg').innerText='Account created! Turn OFF Confirm Email in Supabase or check email, then Login.';}
+window.onerror = function(msg, url, line) {
+  var m = document.getElementById('msg');
+  if (m) m.innerText = 'JS Error (Line ' + line + '): ' + msg;
+};
+const SB_URL = 'https://supabase.co';
+const SB_KEY = 'sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
+let sess = null, trades = [], mkt = 'Indian Market', mode = 'login';
+try { sess = JSON.parse(localStorage.getItem('tjt_s') || 'null'); } catch(e) {}
+const $ = id => document.getElementById(id);
+
+window.onload = function() {
+  $('t-date').valueAsDate = new Date();
+  if (sess && sess.access_token) startApp();
+};
+
+function setMode(m) {
+  mode = m;
+  $('msg').innerText = 'Mode: ' + (m === 'login' ? 'Login' : 'Create Account');
+  $('m-login').className = m === 'login' ? 'btn blue' : 'btn';
+  $('m-signup').className = m === 'signup' ? 'btn blue' : 'btn';
+  $('auth-btn').innerText = m === 'login' ? 'Login to Dashboard' : 'Create Account';
 }
-function logout(){localStorage.removeItem('tjt_s');location.reload();}
-function startApp(){ $('auth-box').classList.add('hidden');$('app').classList.remove('hidden');$('u-mail').innerText=sess.user.email;loadT(); }
-function goPage(p){ $('view-dash').classList.toggle('hidden',p!='dash');$('view-entry').classList.toggle('hidden',p!='entry');$('p-dash').className=p=='dash'?'btn blue':'btn';$('p-entry').className=p=='entry'?'btn blue':'btn';if(p=='dash')render(); }
-function setMkt(m){ mkt=m;$('h-mkt').innerText=m;$('t-ind').className=m=='Indian Market'?'btn blue':'btn';$('t-btc').className=m=='Bitcoin'?'btn blue':'btn';$('t-gld').className=m=='Gold'?'btn blue':'btn';render(); }
-function onMkt(){ const m=$('t-mkt').value,s=$('t-sym'); if(m=='Indian Market'){s.innerHTML='<option>NIFTY</option><option>SENSEX</option>';}else if(m=='Bitcoin'){s.innerHTML='<option>BITCOIN</option>';$('t-setup').value='GOLDEN';}else{s.innerHTML='<option>GOLD</option>';} }
-async function loadT(){
-  const r=await fetch(SB_URL+'/rest/v1/trades?select=*&order=trade_date.desc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+sess.access_token}});
-  if(r.status==401)return logout();
-  const d=await r.json();
-  if(!r.ok){alert('Run SQL in Supabase first: '+(d.message||''));return;}
-  trades=d||[];render();
+
+async function doAuth() {
+  try {
+    const email = $('email').value.trim();
+    const password = $('pass').value;
+    if (!email || password.length < 6) {
+      $('msg').innerText = 'Error: Enter valid email & 6+ char password';
+      return;
+    }
+    $('msg').innerText = 'Connecting to Supabase...';
+    const ep = mode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
+    const r = await fetch(SB_URL + ep, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password })
+    });
+    const d = await r.json();
+    if (!r.ok) {
+      $('msg').innerText = 'Supabase Error: ' + (d.error_description || d.msg || d.message || JSON.stringify(d));
+      return;
+    }
+    if (d.access_token) {
+      sess = d;
+      localStorage.setItem('tjt_s', JSON.stringify(d));
+      startApp();
+    } else {
+      $('msg').innerText = 'Account Created! Now click "Login" tab above and sign in (Turn OFF Confirm Email in Supabase if login fails).';
+    }
+  } catch (err) {
+    $('msg').innerText = 'Network/Code Error: ' + err.message;
+  }
 }
-async function saveT(){
-  const setup=$('t-setup').value.trim().toUpperCase(),dt=$('t-date').value,amt=parseFloat($('t-amt').value),eid=$('edit-id').value;
-  if(!setup||!dt||isNaN(amt)){alert('Fill Setup, Date and Amount');return;}
-  const pnl=$('t-res').value=='LOSS'?-Math.abs(amt):Math.abs(amt);
+
+function logout() { localStorage.removeItem('tjt_s'); location.reload(); }
+function startApp() { $('auth-box').classList.add('hidden'); $('app').classList.remove('hidden'); $('u-mail').innerText = sess.user.email; loadT(); }
+function goPage(p) { $('view-dash').classList.toggle('hidden', p !== 'dash'); $('view-entry').classList.toggle('hidden', p !== 'entry'); $('p-dash').className = p === 'dash' ? 'btn blue' : 'btn'; $('p-entry').className = p === 'entry' ? 'btn blue' : 'btn'; if (p === 'dash') render(); }
+function setMkt(m) { mkt = m; $('h-mkt').innerText = m; $('t-ind').className = m === 'Indian Market' ? 'btn blue' : 'btn'; $('t-btc').className = m === 'Bitcoin' ? 'btn blue' : 'btn'; $('t-gld').className = m === 'Gold' ? 'btn blue' : 'btn'; render(); }
