@@ -108,12 +108,8 @@ th,td{padding:10px;border-bottom:1px solid #1e293b;text-align:left;white-space:n
 </div>
 
 <script>
-window.onerror = function(msg, url, line) {
-  var m = document.getElementById('msg');
-  if (m) m.innerText = 'JS Error (Line ' + line + '): ' + msg;
-};
 const SB_URL = 'https://supabase.co';
-const SB_KEY = 'sb_publishable_7SbeZiUeXb-2ZyU1uRAMqQ_TsA828_a';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impob3VvdWN2b3djYmxycG52ZHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4MTg4MTAsImV4cCI6MjExMDM5NDgxMH0.H_B6bfsTyKQ60R291YdR9-GQhZVd_XgFMUT4_VCzOX8';
 let sess = null, trades = [], mkt = 'Indian Market', mode = 'login';
 try { sess = JSON.parse(localStorage.getItem('tjt_s') || 'null'); } catch(e) {}
 const $ = id => document.getElementById(id);
@@ -156,10 +152,10 @@ async function doAuth() {
       localStorage.setItem('tjt_s', JSON.stringify(d));
       startApp();
     } else {
-      $('msg').innerText = 'Account Created! Now click "Login" tab above and sign in (Turn OFF Confirm Email in Supabase if login fails).';
+      $('msg').innerText = 'Account Created! Now click "Login" tab above and sign in.';
     }
   } catch (err) {
-    $('msg').innerText = 'Network/Code Error: ' + err.message;
+    $('msg').innerText = 'Network Error: ' + err.message;
   }
 }
 
