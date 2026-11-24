@@ -9,5 +9,13 @@
   "start_url": "/",
   "theme_color": "#10b981",
   "id": "the-janaral-trade",
-  "description": "Professional Trading Journal for Indian Market, Bitcoin and Gold. Track trades, profit, loss and performance."
+  "description": "Professional Trading Journal for Indian Market, Bitcoin and Gold. Track trades, profit, loss and performance.",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
