@@ -64,5 +64,13 @@ $('switchAuth').onclick=()=>{isSignup=!isSignup;$('authTitle').textContent=isSig
 $('authButton').onclick=async()=>{hide('authMessage');if(!client){message('authMessage','Supabase connection is not ready. Refresh the page and try again.','error');return}const email=$('email').value.trim(),password=$('password').value;if(!email||password.length<6){message('authMessage','Email daalein aur password kam se kam 6 characters ka rakhein.','error');return}const r=isSignup?await client.auth.signUp({email,password}):await client.auth.signInWithPassword({email,password});if(r.error){message('authMessage',r.error.message,'error');return}if(isSignup&&!r.data.session){message('authMessage','Signup ho gaya. Email confirmation link par click karke phir Login karein.','good');return}if(r.data.user)showApp(r.data.user)};
 $('logout').onclick=async()=>{await client.auth.signOut();currentUser=null;trades=[];hide('app');hide('userBar');show('authBox')};
 (async()=>{if(!window.supabase||!window.Chart||!window.XLSX){message('setupNotice','A required library did not load. Please refresh the page.','error');show('setupNotice');return}client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);$('tradeDate').value=new Date().toISOString().slice(0,10);const {data}=await client.auth.getSession();if(data.session)showApp(data.session.user);client.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{hide('app');hide('userBar');show('authBox')}})})();
+</script><script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('Service Worker registered'))
+      .catch(error => console.error('Service Worker error:', error));
+  });
+}
 </script>
 </body></html>
