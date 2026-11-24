@@ -1,0 +1,13 @@
+{
+  "background_color": "#0b111e",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "THE JANARAL TRADE",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "JANARAL TRADE",
+  "start_url": "/",
+  "theme_color": "#10b981",
+  "id": "the-janaral-trade",
+  "description": "Professional Trading Journal for Indian Market, Bitcoin and Gold. Track trades, profit, loss and performance."
+}
