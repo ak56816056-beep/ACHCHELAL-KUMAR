@@ -1,153 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE JANARAL TRADE</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#0b0f19;color:#f1f5f9;font-family:sans-serif}
-.hidden{display:none!important}
-.card{background:#131b2e;border:1px solid #1e293b;border-radius:12px;padding:18px;margin-bottom:16px}
-.inp{background:#0b0f19;border:1px solid #334155;color:#fff;border-radius:8px;padding:10px;width:100%;margin-top:4px}
-label{font-size:12px;color:#94a3b8;font-weight:700;display:block;margin-top:10px}
-.btn{border:none;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;background:#1e293b}
-.blue{background:#2563eb}.green{background:#059669}.red{background:#dc2626}
-.nav{background:#131b2e;padding:12px 20px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #1e293b}
-.wrap{max-width:1200px;margin:auto;padding:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
-th,td{padding:10px;border-bottom:1px solid #1e293b;text-align:left;white-space:nowrap}
-.t-green{color:#10b981}.t-red{color:#ef4444}
-.bg-win{background:rgba(16,185,129,0.14)}.bg-loss{background:rgba(239,68,68,0.14)}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE JANARAL TRADE - Professional Trading Journal</title>
+  <script src="https://jsdelivr.net"></script>
+  <style>
+    :root {
+      --bg: #0b111e;
+      --card: #131c31;
+      --border: #23304d;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    
+    /* Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: var(--card); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .brand h1 { color: var(--accent); font-size: 1.5rem; letter-spacing: 0.5px; }
+    .brand p { color: var(--muted); font-size: 0.85rem; }
+    .user-bar { display: flex; align-items: center; gap: 12px; }
+    .btn { padding: 9px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #1e293b; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: #283548; }
+    .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 10px; font-size: 0.8rem; }
+    .btn-edit { background: rgba(59, 130, 246, 0.15); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); padding: 5px 10px; font-size: 0.8rem; margin-right: 4px; }
+
+    /* Auth Box */
+    .auth-box { max-width: 400px; margin: 70px auto; background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); }
+    .auth-box h2 { margin-bottom: 20px; text-align: center; color: var(--accent); }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.85rem; }
+    input, select { width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.95rem; }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+
+    /* Navigation Tabs */
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 12px; }
+    .market-tabs, .page-tabs { display: flex; gap: 8px; background: var(--card); padding: 6px; border-radius: 8px; border: 1px solid var(--border); }
+    .tab-btn { padding: 8px 16px; border: none; background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .tab-btn.active { background: var(--accent); color: #fff; }
+    .page-btn.active { background: var(--blue); color: #fff; }
+
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--card); padding: 20px; border-radius: 10px; border: 1px solid var(--border); }
+    .stat-card span { color: var(--muted); font-size: 0.85rem; }
+    .stat-card h3 { font-size: 1.7rem; margin-top: 8px; }
+    .profit { color: var(--green) !important; }
+    .loss { color: var(--red) !important; }
+
+    /* Panels */
+    .panel { background: var(--card); padding: 22px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 24px; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+
+    /* Analytics Grid */
+    .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .mini-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .mini-table td, .mini-table th { padding: 8px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+
+    /* Main Table */
+    .table-wrap { overflow-x: auto; }
+    table.journal { width: 100%; border-collapse: collapse; min-width: 900px; }
+    table.journal th, table.journal td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    table.journal th { color: var(--muted); font-weight: 600; background: rgba(0,0,0,0.2); }
+    .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: 600; }
+    .badge-call { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+    .badge-put { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+    .badge-setup { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+    .hidden { display: none !important; }
+    .msg { padding: 10px; border-radius: 6px; margin-top: 12px; font-size: 0.9rem; }
+    .msg-err { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid var(--red); }
+    .msg-ok { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid var(--green); }
+  </style>
 </head>
 <body>
-<div id="auth-box" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px">
-  <div class="card" style="width:100%;max-width:400px;padding:28px">
-    <h2 style="text-align:center;color:#3b82f6">THE JANARAL TRADE</h2>
-    <div style="display:flex;gap:8px;margin:16px 0">
-      <button type="button" id="m-login" class="btn blue" style="flex:1" onclick="setMode('login')">Login</button>
-      <button type="button" id="m-signup" class="btn" style="flex:1" onclick="setMode('signup')">Create Account</button>
+
+  <header>
+    <div class="brand">
+      <h1>THE JANARAL TRADE</h1>
+      <p>Professional Trading Journal & Analytics</p>
     </div>
-    <label>Email</label><input type="email" id="email" class="inp" placeholder="trader@example.com">
-    <label>Password (6+ chars)</label><input type="password" id="pass" class="inp" placeholder="******">
-    <button type="button" id="auth-btn" class="btn blue" style="width:100%;margin-top:16px" onclick="doAuth()">Login to Dashboard</button>
-    <div id="msg" style="color:#fbbf24;font-size:13px;margin-top:12px;text-align:center;background:#0b0f19;padding:8px;border-radius:6px">Status: Ready</div>
-  </div>
-</div>
-<div id="app" class="hidden">
-  <div class="nav">
-    <div><strong style="color:#3b82f6;font-size:18px">THE JANARAL TRADE</strong> <span id="u-mail" style="font-size:12px;color:#94a3b8"></span></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" id="p-dash" class="btn blue" onclick="goPage('dash')">Dashboards</button>
-      <button type="button" id="p-entry" class="btn" onclick="goPage('entry')">+ Trade Entry</button>
-      <button type="button" class="btn green" onclick="dlExcel()">Excel</button>
-      <button type="button" class="btn red" onclick="logout()">Logout</button>
+    <div id="userBar" class="user-bar hidden">
+      <span id="userEmail" style="color: var(--muted); font-size: 0.9rem;"></span>
+      <button class="btn btn-secondary" onclick="logout()">Logout</button>
     </div>
-  </div>
-  <div id="view-dash" class="wrap">
-    <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto">
-      <button type="button" id="t-ind" class="btn blue" onclick="setMkt('Indian Market')">Indian Market</button>
-      <button type="button" id="t-btc" class="btn" onclick="setMkt('Bitcoin')">Bitcoin</button>
-      <button type="button" id="t-gld" class="btn" onclick="setMkt('Gold')">Gold</button>
-    </div>
-    <div class="card" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span>Date:</span><input type="date" id="f-date" class="inp" style="width:auto;margin:0" onchange="render()">
-        <button type="button" class="btn" onclick="document.getElementById('f-date').value='';render()">All</button>
+  </header>
+
+  <!-- AUTH SECTION -->
+  <div id="authSection" class="container">
+    <div class="auth-box">
+      <h2 id="authTitle">Login to Your Account</h2>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="emailInput" placeholder="Enter your email" />
       </div>
-      <strong id="d-info" style="color:#60a5fa;font-size:13px"></strong>
-    </div>
-    <div class="grid">
-      <div class="card"><small>Net P&L</small><h2 id="k-pnl">0</h2></div>
-      <div class="card"><small>Total Trades</small><h2 id="k-tot">0</h2></div>
-      <div class="card"><small>Win / Loss</small><h2 id="k-wl">0W / 0L</h2></div>
-      <div class="card"><small>Accuracy</small><h2 id="k-acc" style="color:#60a5fa">0%</h2></div>
-    </div>
-    <div class="grid2" style="margin-top:16px">
-      <div class="card" style="overflow-x:auto"><h4>Setup-Wise P&L</h4><table><thead><tr><th>Setup</th><th>Trades</th><th>P&L</th></tr></thead><tbody id="b-setup"></tbody></table></div>
-      <div class="card" style="overflow-x:auto"><h4>Date-Wise Summary</h4><table><thead><tr><th>Date (Day)</th><th>Trades</th><th>P&L</th></tr></thead><tbody id="b-date"></tbody></table></div>
-    </div>
-    <div class="card" style="overflow-x:auto">
-      <h4>Trade History (<span id="h-mkt">Indian Market</span>)</h4>
-      <table><thead><tr><th>Date</th><th>Symbol</th><th>Type</th><th>Setup</th><th>Entry</th><th>Exit</th><th>P&L</th><th>Notes</th><th>Action</th></tr></thead><tbody id="b-list"></tbody></table>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="passwordInput" placeholder="Enter password (min 6 chars)" />
+      </div>
+      <button id="authSubmitBtn" class="btn btn-primary" style="width:100%;" onclick="handleAuth()">Login</button>
+      <p style="text-align:center; margin-top:15px; font-size:0.85rem; color:var(--muted);">
+        <span id="authToggleText">Don't have an account?</span>
+        <a href="#" style="color:var(--accent);" onclick="toggleAuthMode(event)" id="authToggleLink">Sign Up</a>
+      </p>
+      <div id="authMsg"></div>
     </div>
   </div>
-  <div id="view-entry" class="wrap hidden" style="max-width:650px">
-    <div class="card">
-      <h3 id="f-title">New Trade Entry</h3>
-      <input type="hidden" id="edit-id">
-      <div class="grid2">
-        <div><label>Market</label><select id="t-mkt" class="inp" onchange="onMkt()"><option>Indian Market</option><option>Bitcoin</option><option>Gold</option></select></div>
-        <div><label>Index / Symbol</label><select id="t-sym" class="inp"><option>NIFTY</option><option>SENSEX</option></select></div>
-        <div><label>CALL / PUT</label><select id="t-type" class="inp"><option>CALL</option><option>PUT</option></select></div>
-        <div><label>Setup Name</label><input type="text" id="t-setup" class="inp" placeholder="GOLDEN / Breakout"></div>
-        <div><label>Date</label><input type="date" id="t-date" class="inp"></div>
-        <div><label>Entry Time</label><input type="time" id="t-in" class="inp"></div>
-        <div><label>Exit Time</label><input type="time" id="t-out" class="inp"></div>
-        <div><label>Result</label><select id="t-res" class="inp"><option value="PROFIT">PROFIT (Green)</option><option value="LOSS">LOSS (Red)</option></select></div>
-        <div><label>Amount</label><input type="number" step="any" id="t-amt" class="inp" placeholder="2500"></div>
-        <div><label>Notes</label><input type="text" id="t-note" class="inp" placeholder="Optional"></div>
+
+  <!-- MAIN APP SECTION -->
+  <div id="appSection" class="container hidden">
+    
+    <!-- Top Controls: 3 Market Dashboards & 2 Page Views -->
+    <div class="nav-bar">
+      <div class="market-tabs">
+        <button class="tab-btn active" onclick="switchMarket('Indian Market', this)">🇮🇳 Indian Market</button>
+        <button class="tab-btn" onclick="switchMarket('Bitcoin', this)">₿ Bitcoin</button>
+        <button class="tab-btn" onclick="switchMarket('Gold', this)">🪙 Gold</button>
       </div>
-      <div style="display:flex;gap:10px;margin-top:16px">
-        <button type="button" class="btn blue" style="flex:1" onclick="saveT()">Save Trade</button>
-        <button type="button" id="c-edit" class="btn hidden" onclick="resetF()">Cancel</button>
+
+      <div class="page-tabs">
+        <button class="tab-btn page-btn active" id="navDashboardBtn" onclick="switchPage('dashboard')">📊 Dashboard & Journal</button>
+        <button class="tab-btn page-btn" id="navEntryBtn" onclick="switchPage('entry')">➕ Trade Entry</button>
       </div>
     </div>
-  </div>
-</div>
-<script>
-const SB_URL='https://supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impob3VvdWN2b3djYmxycG52ZHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4MTg4MTAsImV4cCI6MjExMDM5NDgxMH0.H_B6bfsTyKQ60R291YdR9-GQhZVd_XgFMUT4_VCzOX8';
-let sess=null,trades=[],mkt='Indian Market',mode='login';
-try{sess=JSON.parse(localStorage.getItem('tjt_s')||'null');}catch(e){}
-const $=id=>document.getElementById(id);
-window.onload=function(){$('t-date').valueAsDate=new Date();if(sess&&sess.access_token)startApp();};
-function setMode(m){mode=m;$('msg').innerText='Mode: '+(m==='login'?'Login':'Create Account');$('m-login').className=m==='login'?'btn blue':'btn';$('m-signup').className=m==='signup'?'btn blue':'btn';$('auth-btn').innerText=m==='login'?'Login to Dashboard':'Create Account';}
-async function doAuth(){
-  try{
-    const email=$('email').value.trim(),password=$('pass').value;
-    if(!email||password.length<6){$('msg').innerText='Enter valid email & 6+ char password';return;}
-    $('msg').innerText='Connecting...';
-    const ep=mode==='login'?'/auth/v1/token?grant_type=password':'/auth/v1/signup';
-    const r=await fetch(SB_URL+ep,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-    const d=await r.json();
-    if(!r.ok){$('msg').innerText='Error: '+(d.error_description||d.msg||d.message||'Failed');return;}
-    if(d.access_token){sess=d;localStorage.setItem('tjt_s',JSON.stringify(d));startApp();}
-    else{$('msg').innerText='Account Created! Click Login tab and sign in.';}
-  }catch(err){$('msg').innerText='Error: '+err.message;}
-}
-function logout(){localStorage.removeItem('tjt_s');location.reload();}
-function startApp(){$('auth-box').classList.add('hidden');$('app').classList.remove('hidden');$('u-mail').innerText=sess.user.email;loadT();}
-function goPage(p){$('view-dash').classList.toggle('hidden',p!=='dash');$('view-entry').classList.toggle('hidden',p!=='entry');$('p-dash').className=p==='dash'?'btn blue':'btn';$('p-entry').className=p==='entry'?'btn blue':'btn';if(p==='dash')render();}
-function setMkt(m){mkt=m;$('h-mkt').innerText=m;$('t-ind').className=m==='Indian Market'?'btn blue':'btn';$('t-btc').className=m==='Bitcoin'?'btn blue':'btn';$('t-gld').className=m==='Gold'?'btn blue':'btn';render();}
-function onMkt(){const m=$('t-mkt').value,s=$('t-sym');if(m==='Indian Market'){s.innerHTML='<option>NIFTY</option><option>SENSEX</option>';}else if(m==='Bitcoin'){s.innerHTML='<option>BITCOIN</option>';$('t-setup').value='GOLDEN';}else{s.innerHTML='<option>GOLD</option>';}}
-async function loadT(){
-  const r=await fetch(SB_URL+'/rest/v1/trades?select=*&order=trade_date.desc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+sess.access_token}});
-  if(r.status===401)return logout();
-  const d=await r.json();
-  if(!r.ok){alert('Run SQL in Supabase: '+(d.message||''));return;}
-  trades=d||[];render();
-}
-async function saveT(){
-  const setup=$('t-setup').value.trim().toUpperCase(),dt=$('t-date').value,amt=parseFloat($('t-amt').value),eid=$('edit-id').value;
-  if(!setup||!dt||isNaN(amt)){alert('Fill Setup, Date and Amount');return;}
-  const pnl=$('t-res').value==='LOSS'?-Math.abs(amt):Math.abs(amt);
-  const body={user_id:sess.user.id,market:$('t-mkt').value,symbol:$('t-sym').value,trade_type:$('t-type').value,setup_name:setup,trade_date:dt,entry_time:$('t-in').value||null,exit_time:$('t-out').value||null,pnl,notes:$('t-note').value};
-  const r=await fetch(SB_URL+'/rest/v1/trades'+(eid?'?id=eq.'+eid:''),{method:eid?'PATCH':'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+sess.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
-  if(!r.ok){const e=await r.json();alert(e.message||'Save failed');return;}
-  setMkt(body.market);resetF();await loadT();goPage('dash');
-}
-function editT(id){const t=trades.find(x=>x.id===id);if(!t)return;goPage('entry');$('f-title').innerText='Edit Trade';$('edit-id').value=t.id;$('t-mkt').value=t.market;onMkt();$('t-sym').value=t.symbol;$('t-type').value=t.trade_type;$('t-setup').value=t.setup_name;$('t-date').value=t.trade_date;$('t-in').value=t.entry_time||'';$('t-out').value=t.exit_time||'';$('t-res').value=t.pnl>=0?'PROFIT':'LOSS';$('t-amt').value=Math.abs(t.pnl);$('t-note').value=t.notes||'';$('c-edit').classList.remove('hidden');}
-async function delT(id){if(confirm('Delete trade?')){await fetch(SB_URL+'/rest/v1/trades?id=eq.'+id,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+sess.access_token}});loadT();}}
-function resetF(){$('edit-id').value='';$('t-setup').value='';$('t-amt').value='';$('t-note').value='';$('f-title').innerText='New Trade Entry';$('c-edit').classList.add('hidden');onMkt();}
-const dayName=d=>['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(d+'T00:00:00').getDay()];
-function render(){
-  const fd=$('f-date').value,mt=trades.filter(t=>t.market===mkt),ft=fd?mt.filter(t=>t.trade_date===fd):mt;
-  $('d-info').innerText=fd?fd+' ('+dayName(fd)+')':mt.length+' Trades in '+mkt;
-  let pnl=0,w=0,l=0;ft.forEach(t=>{pnl+=+t.pnl;if(+t.pnl>0)w++;else if(+t.pnl<0)l++;});
-  $('k-pnl').innerText=(pnl>=0?'+':'')+pnl.toFixed(2);$('k-pnl').className=pnl>=0?'t-green':'t-red';
-  $('k-tot').innerText=ft.length;$('k-wl').innerText=w+'W / '+l+'L';$('k-acc').innerText=(ft.length?(w/ft.length*100).toFixed(0):0)+'%';
-  const sm={},dm={};
+
+    <!-- PAGE 1: DASHBOARD & JOURNAL -->
+    <div id="dashboardPage">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>Total Trades (<span class="curMarketLabel">Indian Market</span>)</span>
+          <h3 id="statTotal">0</h3>
+        </div>
+        <div class="stat-card">
+          <span>Winning Trades</span>
+          <h3 id="statWins" class="profit">0</h3>
+        </div>
+        <div class="stat-card">
+          <span>Win Rate</span>
+          <h3 id="statWinRate">0%</h3>
+        </div>
+        <div class="stat-card">
+          <span>Net P&L</span>
+          <h3 id="statPnl">0.00</h3>
+        </div>
+      </div>
+
+      <!-- Setup-wise & Date-wise Profit/Loss -->
+      <div class="analytics-grid">
+        <div class="panel" style="margin-bottom:0;">
+          <h4>Setup-wise Profit / Loss</h4>
+          <table class="mini-table">
+            <thead><tr><th>Setup</th><th>Trades</th><th>Net P&L</th></tr></thead>
+            <tbody id="setupSummaryBody"></tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-bottom:0;">
+          <h4>Date-wise Profit / Loss</h4>
+          <table class="mini-table">
+            <thead><tr><th>Date</th><th>Trades</th><th>Net P&L</th></tr></thead>
+            <tbody id="dateSummaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Trading Journal Table -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3><span class="curMarketLabel">Indian Market</span> — Trading Journal</h3>
+          <button class="btn btn-primary" onclick="exportToExcel()">📥 Download Excel (CSV)</button>
+        </div>
+        <div class="table-wrap">
+          <table class="journal">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time (In - Out)</th>
+                <th>Instrument</th>
+                <th>Type</th>
+                <th>Setup</th>
+                <th>Entry</th>
+                <th>Exit</th>
+                <th>Qty</th>
+                <th>P&L</th>
+                <th>Result</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tradesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: ADD / EDIT TRADE ENTRY -->
+    <div id="entryPage" class="hidden">
+      <div class="panel">
+        <div class="panel-header">
