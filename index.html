@@ -76,7 +76,7 @@ body{background:#0b1726!important}
 .day-tag.friday{background:#92400e!important}
 .day-tag.saturday{background:#9a3412!important}
 .day-tag.sunday{background:#991b1b!important}
-.setup-tag{background:#4338ca!important}
+.setup-tag{background:var(--tag-bg)!important;border:1px solid var(--tag-color)!important}
 .trade-tag.call,.trade-tag.buy{background:#166534!important}
 .trade-tag.put,.trade-tag.sell{background:#991b1b!important}
 </style>
@@ -94,6 +94,17 @@ body{background:#0b1726!important}
 #page-dashboard .dashboard-heading:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.24;background:repeating-linear-gradient(90deg,transparent 0 7%,rgba(33,197,139,.35) 7.1% 7.35%,transparent 7.45% 14%);mask-image:linear-gradient(90deg,transparent,black 20%,black 90%,transparent)}
 #page-dashboard .dashboard-heading>*{position:relative;z-index:1}
 </style>
+
+<style id="bulls-bears-dashboard-bg">
+/* Bull and bear stay at the two outer corners; center remains clear for title and filter. */
+#page-dashboard .dashboard-heading{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(90deg,rgba(8,28,48,.97),rgba(14,31,58,.94) 24%,rgba(14,31,58,.94) 76%,rgba(8,28,48,.97)),radial-gradient(ellipse at 0% 50%,rgba(25,190,133,.30),transparent 32%),radial-gradient(ellipse at 100% 50%,rgba(239,68,68,.30),transparent 32%),linear-gradient(120deg,#102b43,#1b2446 55%,#123c3c)!important}
+#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{content:"";position:absolute;z-index:0;top:50%;width:clamp(76px,11vw,142px);height:clamp(76px,11vw,142px);transform:translateY(-50%);display:block;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 8px 15px rgba(0,0,0,.55));opacity:.88}
+#page-dashboard .dashboard-heading:before{left:8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cpath fill='%2329c98b' stroke='%23baf7df' stroke-width='3' d='M28 95 17 76 7 62 22 59 38 73 51 55 76 45 103 51 119 43 137 50 151 39 146 61 132 72 128 97 111 113 89 118 80 143 65 139 67 116 49 111 39 125 26 119 36 101Z'/%3E%3Cpath fill='%230b2234' d='m116 52 13-18 7 2-6 19m-94 15-17-13-9 3 14 18'/%3E%3Ccircle cx='119' cy='65' r='4' fill='%230b2234'/%3E%3Cpath d='M88 117 92 143m-29-27-4 26' stroke='%23baf7df' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E")}
+#page-dashboard .dashboard-heading:after{right:8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cpath fill='%23d65b65' stroke='%23ffc1c5' stroke-width='3' d='M25 47 8 32 5 20 22 27 42 42 60 31 91 35 112 49 132 45 151 55 145 70 132 78 127 103 109 119 83 121 72 143 56 139 61 116 42 111 29 123 16 115 29 96Z'/%3E%3Cpath fill='%230b2234' d='m112 50 8-21 8-1-1 25m-83-8-17-17-8 1 12 23'/%3E%3Ccircle cx='116' cy='67' r='4' fill='%230b2234'/%3E%3Cpath d='M91 120 96 144m-31-27-5 26' stroke='%23ffc1c5' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E")}
+#page-dashboard .dashboard-title,#page-dashboard .dashboard-heading>.field{position:relative;z-index:2}
+@media(max-width:600px){#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{width:64px;height:64px;opacity:.68}#page-dashboard .dashboard-heading:before{left:2px}#page-dashboard .dashboard-heading:after{right:2px}#page-dashboard .dashboard-title h2{position:relative;z-index:2}}
+</style>
+
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
