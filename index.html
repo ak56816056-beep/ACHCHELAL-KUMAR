@@ -94,17 +94,6 @@ body{background:#0b1726!important}
 #page-dashboard .dashboard-heading:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.24;background:repeating-linear-gradient(90deg,transparent 0 7%,rgba(33,197,139,.35) 7.1% 7.35%,transparent 7.45% 14%);mask-image:linear-gradient(90deg,transparent,black 20%,black 90%,transparent)}
 #page-dashboard .dashboard-heading>*{position:relative;z-index:1}
 </style>
-
-<style id="bulls-bears-dashboard-bg">
-/* Bulls vs Bears decorative background behind the dashboard heading */
-#page-dashboard .dashboard-heading{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(110deg,rgba(8,28,48,.94),rgba(14,31,58,.91)),radial-gradient(ellipse at 18% 55%,rgba(25,190,133,.30),transparent 38%),radial-gradient(ellipse at 82% 55%,rgba(239,68,68,.27),transparent 38%),linear-gradient(120deg,#102b43,#1b2446 55%,#123c3c)!important}
-#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{position:absolute;z-index:-1;top:50%;transform:translateY(-50%);font-size:clamp(78px,12vw,150px);line-height:1;opacity:.28;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));pointer-events:none}
-#page-dashboard .dashboard-heading:before{content:"🐂";left:clamp(8px,5vw,76px)}
-#page-dashboard .dashboard-heading:after{content:"🐻";right:clamp(8px,5vw,76px)}
-#page-dashboard .dashboard-title,#page-dashboard .dashboard-heading>.field{position:relative;z-index:1}
-@media(max-width:600px){#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{font-size:64px;opacity:.20}#page-dashboard .dashboard-heading:before{left:4px}#page-dashboard .dashboard-heading:after{right:4px}}
-</style>
-
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
