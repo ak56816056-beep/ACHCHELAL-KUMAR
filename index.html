@@ -76,7 +76,7 @@ body{background:#0b1726!important}
 .day-tag.friday{background:#92400e!important}
 .day-tag.saturday{background:#9a3412!important}
 .day-tag.sunday{background:#991b1b!important}
-.setup-tag{background:var(--tag-bg)!important;color:#ffffff!important;border-color:transparent!important}
+.setup-tag{background:#4338ca!important}
 .trade-tag.call,.trade-tag.buy{background:#166534!important}
 .trade-tag.put,.trade-tag.sell{background:#991b1b!important}
 </style>
@@ -86,6 +86,25 @@ body{background:#0b1726!important}
 /* Keep all labels inside colored badges white; retain each badge background. */
 .color-tag, .trade-tag { color: #ffffff !important; }
 </style>
+
+<style id="dashboard-heading-background">
+/* Decorative market-chart background behind the dashboard heading; text and controls stay unchanged. */
+#page-dashboard .dashboard-heading{position:relative;isolation:isolate;overflow:hidden;background-color:#102b43;background-image:radial-gradient(ellipse at 12% 18%,rgba(33,197,139,.24),transparent 34%),radial-gradient(ellipse at 88% 82%,rgba(98,168,255,.25),transparent 38%),linear-gradient(115deg,rgba(10,29,48,.94),rgba(25,43,75,.88)),repeating-linear-gradient(0deg,rgba(157,190,225,.055) 0,rgba(157,190,225,.055) 1px,transparent 1px,transparent 28px),repeating-linear-gradient(90deg,rgba(157,190,225,.055) 0,rgba(157,190,225,.055) 1px,transparent 1px,transparent 28px)}
+#page-dashboard .dashboard-heading:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.42;background:linear-gradient(155deg,transparent 0 46%,rgba(33,197,139,.55) 46.2% 46.6%,transparent 46.8% 100%),linear-gradient(145deg,transparent 0 58%,rgba(98,168,255,.5) 58.2% 58.6%,transparent 58.8% 100%);clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+#page-dashboard .dashboard-heading:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.24;background:repeating-linear-gradient(90deg,transparent 0 7%,rgba(33,197,139,.35) 7.1% 7.35%,transparent 7.45% 14%);mask-image:linear-gradient(90deg,transparent,black 20%,black 90%,transparent)}
+#page-dashboard .dashboard-heading>*{position:relative;z-index:1}
+</style>
+
+<style id="bulls-bears-dashboard-bg">
+/* Bulls vs Bears decorative background behind the dashboard heading */
+#page-dashboard .dashboard-heading{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(110deg,rgba(8,28,48,.94),rgba(14,31,58,.91)),radial-gradient(ellipse at 18% 55%,rgba(25,190,133,.30),transparent 38%),radial-gradient(ellipse at 82% 55%,rgba(239,68,68,.27),transparent 38%),linear-gradient(120deg,#102b43,#1b2446 55%,#123c3c)!important}
+#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{position:absolute;z-index:-1;top:50%;transform:translateY(-50%);font-size:clamp(78px,12vw,150px);line-height:1;opacity:.28;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));pointer-events:none}
+#page-dashboard .dashboard-heading:before{content:"🐂";left:clamp(8px,5vw,76px)}
+#page-dashboard .dashboard-heading:after{content:"🐻";right:clamp(8px,5vw,76px)}
+#page-dashboard .dashboard-title,#page-dashboard .dashboard-heading>.field{position:relative;z-index:1}
+@media(max-width:600px){#page-dashboard .dashboard-heading:before,#page-dashboard .dashboard-heading:after{font-size:64px;opacity:.20}#page-dashboard .dashboard-heading:before{left:4px}#page-dashboard .dashboard-heading:after{right:4px}}
+</style>
+
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
@@ -135,7 +154,7 @@ function tagClass(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,'-
 function assetBadge(t){const a=asset(t).toUpperCase();const key=a.includes('NIFTY')?'nifty':a.includes('SENSEX')?'sensex':a.includes('BTC')||a.includes('BITCOIN')?'bitcoin':a.includes('GOLD')?'gold':'other';const icon={nifty:'🇮🇳',sensex:'📈',bitcoin:'₿',gold:'🥇',other:'📌'}[key];return `<span class="color-tag asset-tag ${key}">${icon} ${esc(a||'Unknown')}</span>`}
 function marketBadge(t){const m=market(t),key=m.toLowerCase(),label=m==='INDIAN'?'INDIAN MARKET':m;const icon=m==='INDIAN'?'🇮🇳':m==='BITCOIN'?'₿':'🥇';return `<span class="color-tag market-tag ${key}">${icon} ${label}</span>`}
 function dayBadge(t){const d=dayName(t),key=tagClass(d);const icons={monday:'🟣',tuesday:'🔵',wednesday:'🟢',thursday:'🌸',friday:'🟡',saturday:'🟠',sunday:'🔴'};return `<span class="color-tag day-tag ${key}">${icons[key]||'📅'} ${esc(d)}</span>`}
-function setupBadge(v){const name=String(v||'Unknown'),h=[...name].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7),hue=h%360;return `<span class="color-tag setup-tag" style="--tag-color:hsl(${hue} 85% 76%);--tag-bg:hsl(${hue} 65% 38%)">⚙️ ${esc(name)}</span>`}
+function setupBadge(v){const name=String(v||'Unknown'),h=[...name].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7),hue=h%360;return `<span class="color-tag setup-tag" style="--tag-color:hsl(${hue} 85% 76%);--tag-bg:hsl(${hue} 55% 25% / .48)">⚙️ ${esc(name)}</span>`}
 
 function renderJournal(){const list=filtered();$('tradeRows').innerHTML=list.map(t=>{const v=pnl(t),cls=v>0?'profit-row':v<0?'loss-row':'';return `<tr class="${cls}"><td>${esc(t.trade_date)}</td><td>${dayBadge(t)}</td><td>${marketBadge(t)}</td><td>${assetBadge(t)}</td><td>${tradeTypeBadge(t.trade_type)}</td><td>${setupBadge(t.setup)}</td><td>${esc(t.entry_time||'')}</td><td>${esc(t.exit_time||'')}</td><td>${esc(t.entry_price)}</td><td>${esc(t.exit_price)}</td><td>${esc(t.quantity)}</td><td>${esc(t.market_op??'')}</td><td class="pnl">${money(v)}</td><td>${money(t.profit??Math.max(v,0))}</td><td>${money(t.loss??Math.max(-v,0))}</td><td class="result">${esc(t.result||(v>0?'WIN':v<0?'LOSS':'BREAKEVEN'))}</td><td><button class="small" data-edit="${esc(t.id)}">Edit</button> <button class="small danger" data-delete="${esc(t.id)}">Delete</button></td></tr>`}).join('');$('journalEmpty').classList.toggle('hidden',list.length>0)}
 function renderReports(){const agg=key=>{const o={};trades.forEach(t=>{const k=t[key]||'Unknown';o[k]=(o[k]||0)+pnl(t)});return Object.entries(o).sort((a,b)=>b[1]-a[1])};const make=(arr,kind)=>arr.length?arr.map(([k,v])=>`<div class="statline"><span>${kind==='setup'?setupBadge(k):`<span class=\"color-tag day-tag ${tagClass(k)}\">📅 ${esc(k)}</span>`}</span><b class="${v>=0?'green':'red'}">${money(v)}</b></div>`).join(''):'<p class="muted">No data yet.</p>';$('setupReport').innerHTML=make(agg('setup'),'setup');$('dayReport').innerHTML=make(agg('day'),'day');const dates={};trades.forEach(t=>{const k=t.trade_date||'Unknown';if(!dates[k])dates[k]={day:dayName(t),count:0,pnl:0};dates[k].count++;dates[k].pnl+=pnl(t)});$('dateReport').innerHTML=Object.entries(dates).sort((a,b)=>b[0].localeCompare(a[0])).map(([d,v])=>`<div class="statline"><span>${esc(d)} · ${dayBadge({day:v.day})} · ${v.count} trades</span><b class="${v.pnl>=0?'green':'red'}">${money(v.pnl)}</b></div>`).join('')||'<p class="muted">No data yet.</p>'}
