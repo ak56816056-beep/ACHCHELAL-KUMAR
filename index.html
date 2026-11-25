@@ -60,7 +60,79 @@ function pnl(t){return Number(t.pnl??t.gross_pnl??0)}function asset(t){return St
 function market(t){const m=String(t.market_category??t.market_type??'').toUpperCase(),a=asset(t).toUpperCase();if(m.includes('BTC')||m.includes('BITCOIN')||a.includes('BTC')||a.includes('BITCOIN'))return 'BITCOIN';if(m.includes('GOLD')||a.includes('GOLD'))return 'GOLD';return 'INDIAN'}
 function dayName(t){if(t.day)return t.day;return t.trade_date?new Date(t.trade_date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'}):'Unknown'}
 function currentTrades(){const m=$('dashMarket').value;return m==='ALL'?trades:trades.filter(t=>market(t)===m)}
-function chart(id,type,labels,data,label='Net P&L',horizontal=false){if(!window.Chart)return;const el=$(id);if(!el)return;if(chartRefs[id])chartRefs[id].destroy();chartRefs[id]=new Chart(el,{type,data:{labels,datasets:[{label,data,backgroundColor:type==='line'?'rgba(33,197,139,.16)':data.map(v=>v>=0?'rgba(33,197,139,.82)':'rgba(255,98,109,.82)'),borderColor:type==='line'?'#21c58b':data.map(v=>v>=0?'#21c58b':'#ff626d'),borderWidth:2,borderRadius:7,fill:type==='line',tension:.35,pointRadius:3}]},options:{indexAxis:horizontal?'y':'x',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>money(c.raw)}}},scales:{x:{ticks:{color:'#a9bad0'},grid:{color:'rgba(160,180,205,.08)'}},y:{ticks:{color:'#a9bad0',callback:v=>horizontal? v:'₹'+Number(v).toLocaleString('en-IN')},grid:{color:'rgba(160,180,205,.08)'}}}}})}
+function chart(id,type,labels,data,label='Net P&L',horizontal=false){
+  const el=$(id);
+  if(!el) return;
+
+  if(!window.Chart){
+    console.error('Chart.js library load nahi hui');
+    return;
+  }
+
+  if(chartRefs[id]){
+    chartRefs[id].destroy();
+    delete chartRefs[id];
+  }
+
+  const values=data.map(v=>Number(v)||0);
+  const positive='#21c58b';
+  const negative='#ff626d';
+
+  try{
+    chartRefs[id]=new Chart(el,{
+      type:type,
+      data:{
+        labels:labels,
+        datasets:[{
+          label:label,
+          data:values,
+          backgroundColor:type==='line'
+            ? 'rgba(33,197,139,.18)'
+            : values.map(v=>v>=0?'rgba(33,197,139,.82)':'rgba(255,98,109,.82)'),
+          borderColor:type==='line'
+            ? positive
+            : values.map(v=>v>=0?positive:negative),
+          borderWidth:2,
+          borderRadius:type==='bar'?7:0,
+          fill:type==='line',
+          tension:.35,
+          pointRadius:type==='line'?4:0,
+          pointBackgroundColor:positive
+        }]
+      },
+      options:{
+        indexAxis:horizontal?'y':'x',
+        responsive:true,
+        maintainAspectRatio:false,
+        animation:{duration:700},
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            callbacks:{
+              label:c=>money(c.raw)
+            }
+          }
+        },
+        scales:{
+          x:{
+            ticks:{color:'#a9bad0'},
+            grid:{color:'rgba(160,180,205,.08)'}
+          },
+          y:{
+            beginAtZero:true,
+            ticks:{
+              color:'#a9bad0',
+              callback:v=>horizontal?v:'₹'+Number(v).toLocaleString('en-IN')
+            },
+            grid:{color:'rgba(160,180,205,.08)'}
+          }
+        }
+      }
+    });
+  }catch(error){
+    console.error('Chart error:',id,error);
+  }
+}
 function renderDashboard(){const a=currentTrades(),wins=a.filter(t=>pnl(t)>0).length,losses=a.filter(t=>pnl(t)<0).length,net=a.reduce((s,t)=>s+pnl(t),0);$('total').textContent=a.length;$('wins').textContent=wins;$('losses').textContent=losses;$('rate').textContent=(a.length?wins/a.length*100:0).toFixed(1)+'%';$('netPnl').textContent=money(net);$('netPnl').className=net>=0?'green':'red';
 const setups={};a.forEach(t=>{const k=t.setup||'Unknown';setups[k]=(setups[k]||0)+pnl(t)});const se=Object.entries(setups).sort((x,y)=>y[1]-x[1]);chart('setupChart','bar',se.map(x=>x[0]),se.map(x=>x[1]),'Net P&L',true);
 const order=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],days={};a.forEach(t=>{const d=dayName(t);days[d]=(days[d]||0)+pnl(t)});const dl=order.filter(d=>d in days);chart('dayChart','bar',dl,dl.map(d=>days[d]));
