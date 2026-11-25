@@ -58,6 +58,26 @@ body{background:#0b1726!important}
 /* Additive mobile safety: keep every existing section and control intact. */
 @media(max-width:600px){header{align-items:stretch}header>div:first-child{width:100%}.auth{margin:16px auto}.auth-form{min-width:0}.auth-actions a,.auth-actions button{min-height:46px}.nav{overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px}.nav button{flex:0 0 auto}.chart-wrap{min-height:220px}}
 </style>
+
+<style id="box-color-only">
+/* Box backgrounds and borders only. Text styling is intentionally untouched. */
+body{background:#0b1224}
+header,.header,.topbar{background:linear-gradient(120deg,#123b58,#282653)!important;border-color:#3b6484!important}
+nav,.nav,.sidebar{background:#151f39!important;border-color:#34466d!important}
+nav button,.nav button,.nav a{background:#26395e!important;border-color:#45618f!important}
+.panel,.card,.metric,.stat-card,.dashboard-card,.chart-panel,.auth-form,.auth-visual,.modal,.table-wrap,.form-card{background:linear-gradient(145deg,#1a2b4b,#29264b)!important;border:1px solid #465b83!important}
+.metric:nth-of-type(4n+1),.stat-card:nth-of-type(4n+1){background:linear-gradient(135deg,#173e4b,#1d3554)!important}
+.metric:nth-of-type(4n+2),.stat-card:nth-of-type(4n+2){background:linear-gradient(135deg,#3b294e,#252d50)!important}
+.metric:nth-of-type(4n+3),.stat-card:nth-of-type(4n+3){background:linear-gradient(135deg,#4a303c,#302b50)!important}
+.metric:nth-of-type(4n),.stat-card:nth-of-type(4n){background:linear-gradient(135deg,#24463f,#253451)!important}
+button,.btn,input,select,textarea{background-color:#26395b;border-color:#50658d}
+th{background:#263b63}
+tbody tr:nth-child(odd){background:#192744}
+tbody tr:nth-child(even){background:#202c49}
+.notice{background:#263d63;border-color:#536e9e}
+.notice.error{background:#512d48}.notice.good{background:#1d5149}
+</style>
+
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
