@@ -60,27 +60,32 @@ body{background:#0b1726!important}
 </style>
 
 <style id="box-color-only">
-/* Solid coloured BOXES for labels; label text colour/size/font stays unchanged. */
-.color-tag,.trade-tag{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:9px;border:1px solid transparent;background-clip:padding-box;box-shadow:0 2px 8px #0003}
-.market-tag.indian{background:#075985!important;border-color:#0ea5e9!important}
-.market-tag.bitcoin{background:#92400e!important;border-color:#f59e0b!important}
-.market-tag.gold{background:#854d0e!important;border-color:#eab308!important}
-.asset-tag.nifty{background:#166534!important;border-color:#22c55e!important}
-.asset-tag.sensex{background:#1e40af!important;border-color:#60a5fa!important}
-.asset-tag.bitcoin{background:#92400e!important;border-color:#fbbf24!important}
-.asset-tag.gold{background:#9d174d!important;border-color:#f472b6!important}
-.day-tag.monday{background:#5b21b6!important;border-color:#a78bfa!important}
-.day-tag.tuesday{background:#155e75!important;border-color:#22d3ee!important}
-.day-tag.wednesday{background:#166534!important;border-color:#4ade80!important}
-.day-tag.thursday{background:#9d174d!important;border-color:#f472b6!important}
-.day-tag.friday{background:#92400e!important;border-color:#fbbf24!important}
-.day-tag.saturday{background:#9a3412!important;border-color:#fb923c!important}
-.day-tag.sunday{background:#991b1b!important;border-color:#f87171!important}
-.setup-tag{background:#4338ca!important;border-color:#818cf8!important}
-.trade-tag.call,.trade-tag.buy{background:#166534!important;border-color:#22c55e!important}
-.trade-tag.put,.trade-tag.sell{background:#991b1b!important;border-color:#f87171!important}
+/* Market/day/setup labels use filled button-like boxes; text styling is untouched. */
+.color-tag,.trade-tag{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 10px;border-radius:9px;border:0;box-shadow:0 2px 7px #0004;background-clip:padding-box;white-space:nowrap}
+.market-tag.indian{background:#075985!important}
+.market-tag.bitcoin{background:#92400e!important}
+.market-tag.gold{background:#854d0e!important}
+.asset-tag.nifty{background:#166534!important}
+.asset-tag.sensex{background:#1e40af!important}
+.asset-tag.bitcoin{background:#92400e!important}
+.asset-tag.gold{background:#9d174d!important}
+.day-tag.monday{background:#5b21b6!important}
+.day-tag.tuesday{background:#155e75!important}
+.day-tag.wednesday{background:#166534!important}
+.day-tag.thursday{background:#9d174d!important}
+.day-tag.friday{background:#92400e!important}
+.day-tag.saturday{background:#9a3412!important}
+.day-tag.sunday{background:#991b1b!important}
+.setup-tag{background:#4338ca!important}
+.trade-tag.call,.trade-tag.buy{background:#166534!important}
+.trade-tag.put,.trade-tag.sell{background:#991b1b!important}
 </style>
 
+
+<style id="white-text-inside-color-boxes">
+/* Keep all labels inside colored badges white; retain each badge background. */
+.color-tag, .trade-tag { color: #ffffff !important; }
+</style>
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
