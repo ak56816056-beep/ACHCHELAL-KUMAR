@@ -30,6 +30,35 @@ h1{letter-spacing:1.2px;font-size:24px}
 #page-dashboard .chart-wrap{height:270px}
 #page-dashboard .summary-grid{margin-top:18px}
 @media(max-width:600px){header{padding:15px 4%}h1{font-size:19px}.nav{display:grid;grid-template-columns:1fr 1fr}.nav button{padding:11px 7px;font-size:12px}#page-dashboard>.topline{padding:16px}#page-dashboard>.topline h2{font-size:23px}#page-dashboard .metric{padding:14px;min-height:96px}#page-dashboard .metric h2{font-size:21px}#page-dashboard .chart-wrap{height:230px}}
+
+/* Dashboard redesign v3 - trading terminal */
+:root{--bg:#080d17;--panel:#101a2b;--panel2:#14243a;--line:#263b56;--muted:#91a4bd;--green:#35d6a0;--red:#ff657a;--blue:#58a6ff}
+body{background:linear-gradient(135deg,#080d17 0%,#0a1423 55%,#0b1b2b 100%);color:#edf4ff}
+header{background:rgba(8,14,25,.94);border-bottom:1px solid #263b56;box-shadow:0 8px 30px #0005}
+#page-dashboard{animation:dashIn .35s ease}
+@keyframes dashIn{from{opacity:.65;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#page-dashboard>.topline{position:relative;overflow:hidden;min-height:122px;padding:25px 28px;border:1px solid #2a4968;border-radius:20px;background:radial-gradient(circle at 90% 15%,#1c9a8060,transparent 30%),linear-gradient(115deg,#132a43,#0d1a2b 72%);box-shadow:0 18px 42px #0005}
+#page-dashboard>.topline:after{content:"LIVE PERFORMANCE";position:absolute;right:24px;bottom:18px;color:#8aa6c2;font-size:10px;letter-spacing:2px;font-weight:800}
+#page-dashboard>.topline h2{font-size:30px;letter-spacing:.3px;margin-top:8px}
+#page-dashboard .kicker{color:#4ce0b0}
+#page-dashboard .cards{gap:14px;margin:18px 0 22px}
+#page-dashboard .metric{border:1px solid #294663;border-radius:18px;padding:21px;background:linear-gradient(145deg,#152a42,#0d1929);box-shadow:0 12px 28px #0004;min-height:118px;transition:transform .2s,border-color .2s}
+#page-dashboard .metric:hover{transform:translateY(-3px);border-color:#3b9c91}
+#page-dashboard .metric p{font-size:11px;letter-spacing:1.1px;color:#9bb1c9;text-transform:uppercase;font-weight:800}
+#page-dashboard .metric h2{font-size:28px;margin-top:13px;font-variant-numeric:tabular-nums}
+#page-dashboard .chart-grid{gap:17px;margin-top:20px}
+#page-dashboard .chart-panel{padding:21px;border:1px solid #29435e;border-radius:19px;background:linear-gradient(155deg,#14263c,#0c1727);box-shadow:0 16px 36px #0004;transition:border-color .2s}
+#page-dashboard .chart-panel:hover{border-color:#3b6b83}
+#page-dashboard .chart-panel h3{font-size:16px;font-weight:800;color:#edf6ff}
+#page-dashboard .chart-panel p{font-size:12px;color:#8fa8c2}
+#page-dashboard .chart-wrap{height:285px}
+#page-dashboard .summary-grid{gap:17px;margin-top:18px}
+#page-dashboard .panel{padding:21px;border:1px solid #29435e;border-radius:18px;background:linear-gradient(150deg,#14263c,#0c1727);box-shadow:0 14px 32px #0004}
+#page-dashboard .panel h3{font-size:15px;letter-spacing:.5px;color:#e8f2ff;margin-bottom:10px}
+#page-dashboard .statline{padding:13px 2px;border-bottom:1px solid #263b56}
+#dashMarket{background:#0b192a;border:1px solid #3a607d;border-radius:11px;font-weight:700}
+@media(max-width:600px){#page-dashboard>.topline{padding:19px;min-height:110px}#page-dashboard>.topline:after{font-size:8px;right:14px;bottom:12px}#page-dashboard>.topline h2{font-size:25px}#page-dashboard .cards{gap:9px}#page-dashboard .metric{min-height:100px;padding:15px}#page-dashboard .metric h2{font-size:22px;margin-top:10px}#page-dashboard .chart-wrap{height:245px}#page-dashboard .chart-panel,#page-dashboard .panel{padding:16px}}
+
 </style>
 </head>
 <body>
