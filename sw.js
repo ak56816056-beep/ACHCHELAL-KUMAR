@@ -1,4 +1,4 @@
-const CACHE_NAME = 'janaral-trade-v1';
+const CACHE_NAME = 'janaral-trade-v2';
 
 const FILES_TO_CACHE = [
   '/',
