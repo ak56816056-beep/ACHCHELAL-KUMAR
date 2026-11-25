@@ -115,17 +115,18 @@ function chart(id,type,labels,data,label='Net P&L',horizontal=false){
         datasets:[{
           label:label,
           data:values,
-          backgroundColor:type==='line'
-            ? 'rgba(33,197,139,.18)'
-            : values.map(v=>v>=0?'rgba(33,197,139,.82)':'rgba(255,98,109,.82)'),
-          borderColor:type==='line'
-            ? positive
-            : values.map(v=>v>=0?positive:negative),
-          borderWidth:2,
-          borderRadius:type==='bar'?7:0,
+          backgroundColor:type==='doughnut'
+            ? ['#21c58b','#62a8ff','#f6b94b']
+            : type==='line' ? 'rgba(33,197,139,.16)'
+            : values.map(v=>v>=0?'rgba(33,197,139,.86)':'rgba(255,98,109,.86)'),
+          borderColor:type==='doughnut' ? '#101c2e' : type==='line' ? positive : values.map(v=>v>=0?positive:negative),
+          borderWidth:type==='doughnut'?3:2,
+          borderRadius:type==='bar'?9:0,
+          hoverOffset:type==='doughnut'?10:0,
           fill:type==='line',
-          tension:.35,
+          tension:.4,
           pointRadius:type==='line'?4:0,
+          pointHoverRadius:type==='line'?7:0,
           pointBackgroundColor:positive
         }]
       },
@@ -135,14 +136,14 @@ function chart(id,type,labels,data,label='Net P&L',horizontal=false){
         maintainAspectRatio:false,
         animation:{duration:700},
         plugins:{
-          legend:{display:false},
+          legend:{display:type==='doughnut',position:'bottom',labels:{color:'#c5d4e5',padding:18,usePointStyle:true}},
           tooltip:{
             callbacks:{
               label:c=>money(c.raw)
             }
           }
         },
-        scales:{
+        scales:type==='doughnut'?{}:{
           x:{
             ticks:{color:'#a9bad0'},
             grid:{color:'rgba(160,180,205,.08)'}
@@ -166,7 +167,7 @@ function renderDashboard(){const a=currentTrades(),wins=a.filter(t=>pnl(t)>0).le
 const setups={};a.forEach(t=>{const k=t.setup||'Unknown';setups[k]=(setups[k]||0)+pnl(t)});const se=Object.entries(setups).sort((x,y)=>y[1]-x[1]);chart('setupChart','bar',se.map(x=>x[0]),se.map(x=>x[1]),'Net P&L',true);
 const order=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],days={};a.forEach(t=>{const d=dayName(t);days[d]=(days[d]||0)+pnl(t)});const dl=order.filter(d=>d in days);chart('dayChart','bar',dl,dl.map(d=>days[d]));
 const dateMap={};a.forEach(t=>{const d=t.trade_date||'Unknown';dateMap[d]=(dateMap[d]||0)+pnl(t)});const dates=Object.keys(dateMap).sort();chart('trendChart','line',dates,dates.map(d=>dateMap[d]),'Daily P&L');
-const ms=['INDIAN','BITCOIN','GOLD'],mv=ms.map(m=>a.filter(t=>market(t)===m).reduce((s,t)=>s+pnl(t),0));chart('marketChart','bar',['Indian Market','Bitcoin','Gold'],mv);
+const ms=['INDIAN','BITCOIN','GOLD'],mv=ms.map(m=>a.filter(t=>market(t)===m).reduce((s,t)=>s+pnl(t),0));chart('marketChart','doughnut',['Indian Market','Bitcoin','Gold'],mv);
 $('marketSummary').innerHTML=ms.map(m=>{const list=trades.filter(t=>market(t)===m),v=list.reduce((s,t)=>s+pnl(t),0);return `<div class="statline"><span>${m==='INDIAN'?'Indian Market':m}</span><b class="${v>=0?'green':'red'}">${money(v)} · ${list.length} trades</b></div>`}).join('');const recent=[...a].sort((x,y)=>(y.trade_date||'').localeCompare(x.trade_date||'')).slice(0,5);$('recentSummary').innerHTML=recent.length?recent.map(t=>`<div class="statline"><span>${esc(t.trade_date)} · ${esc(t.setup)}</span><b class="${pnl(t)>=0?'green':'red'}">${money(pnl(t))}</b></div>`).join(''):'<p class="muted">No trades yet.</p>'}
 function page(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));if(name==='dashboard')renderDashboard();if(name==='journal')renderJournal();if(name==='reports')renderReports()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>page(b.dataset.page));
