@@ -125,12 +125,45 @@ body{background:#0b1726!important}
 <style id="trade-review-addons">
 .review-modal{position:fixed;inset:0;background:#020817dd;z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}.review-modal.open{display:flex}.review-card{width:min(760px,100%);max-height:92vh;overflow:auto;background:#102238;border:1px solid #35516e;border-radius:16px;padding:20px;box-shadow:0 20px 60px #0009}.review-card h2{margin:0 0 8px}.review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.review-field{display:flex;flex-direction:column;gap:6px}.review-field input{width:100%}.rule-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.rule-item{display:flex;gap:9px;align-items:flex-start;background:#1b3048;border:1px solid #38516b;border-radius:9px;padding:10px;font-size:13px}.rule-item input{margin-top:2px;accent-color:#21c58b}.score-pill{display:inline-block;padding:8px 14px;border-radius:9px;background:#166534;color:white;font-weight:900}.holding-pill{display:inline-block;padding:6px 9px;border-radius:8px;background:#234b70;color:#fff;font-weight:800;white-space:nowrap}@media(max-width:650px){.review-grid,.rule-list{grid-template-columns:1fr}}
 </style>
+
+<style id="explore-demo-styles">
+.explore-demo{margin:28px 0 34px;padding:22px;border:2px solid #16d99a;border-radius:20px;background:linear-gradient(145deg,#071626,#0b1d31);box-shadow:0 0 24px #10b98122}
+.demo-heading{text-align:center;margin-bottom:18px}.demo-heading h2{font-size:clamp(25px,3vw,36px);margin:0 0 5px}.demo-heading p{margin:0;color:#b9cbe0}
+.demo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.demo-card{min-width:0;display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid #315477;border-radius:14px;background:linear-gradient(145deg,#102641,#071626)}
+.demo-card-top{display:flex;align-items:center;gap:9px}.demo-icon{font-size:25px}.demo-card h3{font-size:16px;margin:0}.demo-card p{font-size:13px;color:#c3d4e8;margin:0;min-height:36px;line-height:1.4}
+.demo-mini{height:78px;border:1px solid #294968;border-radius:9px;background:#09182a;padding:8px;display:flex;align-items:center;justify-content:center;gap:8px;overflow:hidden}
+.demo-bars{height:100%;display:flex;align-items:end;gap:5px}.demo-bars i{display:block;width:13px;border-radius:4px 4px 0 0;background:linear-gradient(#22e6a4,#078c68)}
+.demo-stat{font-size:11px;color:#d7e8fa;line-height:1.8}.demo-stat b{color:#20e6a2}.demo-ring{width:62px;height:62px;border-radius:50%;border:8px solid #16d99a;border-right-color:#24415c;display:grid;place-items:center;font-weight:900}
+.demo-btn{margin-top:auto;align-self:flex-start;border:1px solid #12d995!important;background:transparent!important;color:#23e6a6!important;padding:7px 12px!important;border-radius:9px!important;font-size:12px!important}
+.demo-foot{text-align:center;color:#16dfaa;font-weight:800;margin:18px 0 0}
+.demo-modal{display:none;position:fixed;inset:0;z-index:10000;background:#020817df;align-items:center;justify-content:center;padding:16px}.demo-modal.open{display:flex}.demo-modal-card{width:min(520px,100%);background:#102238;border:1px solid #16d99a;border-radius:16px;padding:22px;box-shadow:0 18px 55px #000b}.demo-modal-card h3{margin:0 0 8px}.demo-modal-card p{color:#c4d4e8}.demo-modal-close{float:right}
+@media(max-width:900px){.demo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.explore-demo{padding:13px}.demo-grid{grid-template-columns:1fr}.demo-card p{min-height:0}}
+</style>
+
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
 <main>
 <div id="setupNotice" class="notice hidden">Supabase connection settings are missing. Please contact the website administrator.</div>
 <section id="authBox" class="auth"><div class="auth-visual"><div class="brand">◆ &nbsp; THE JANARAL TRADE</div><div><div class="kicker">TRADING JOURNAL & ANALYTICS</div><h2>Your trading.<br>One clear picture.</h2><p>Track every setup, understand your performance and build a disciplined trading routine — all in one professional workspace.</p><div class="points"><div>✓ &nbsp; Market-wise performance</div><div>✓ &nbsp; Setup and weekday analytics</div><div>✓ &nbsp; Private trading journal</div><div>✓ &nbsp; Excel trade exports</div></div></div><small class="muted">A focused workspace for better trading decisions.</small></div><div class="auth-form"><div class="kicker">WELCOME BACK</div><h2 id="authTitle">Login to your account</h2><p>Enter your account details to continue to your trading workspace.</p><div class="field"><label>EMAIL ADDRESS</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>PASSWORD</label><input id="password" type="password" autocomplete="current-password" placeholder="Enter your password"></div><div class="auth-actions"><a class="apk-download" style="width:100%" href="https://raw.githubusercontent.com/ak56816056-beep/ACHCHELAL-KUMAR/main/THE%20JANARAL%20TRADE.apk" download="THE-JANARAL-TRADE.apk">⬇ Download Mobile App (APK)</a><button id="authButton">Login</button><button id="switchAuth" class="secondary" type="button">Create new account</button><button id="forgotPassword" class="secondary" type="button" style="background:transparent;color:#159b70;border:0;text-decoration:underline;padding:8px 0">Forgot Password?</button></div><div class="muted" style="font-size:12px;margin-top:16px">● Secure sign-in. Your trading data stays private to your account.</div><div id="authMessage" class="notice hidden"></div></div></section>
+
+<section class="explore-demo" id="exploreDemo">
+  <div class="demo-heading"><h2>🚀 Explore Demo</h2><p>See what <strong style="color:#16dfaa">THE JANARAL TRADE</strong> can do for you — sample preview only</p></div>
+  <div class="demo-grid">
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">📊</span><h3>Dashboard</h3></div><p>Track overall performance with clear charts and key metrics.</p><div class="demo-mini"><div class="demo-bars"><i style="height:35%"></i><i style="height:55%"></i><i style="height:72%"></i><i style="height:48%"></i><i style="height:90%"></i><i style="height:66%"></i></div><div class="demo-stat">WIN RATE<br><b>68.5%</b><br>NET P&amp;L <b>+₹8,450</b></div></div><button class="demo-btn" data-demo="Dashboard">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">🏆</span><h3>Setup &amp; Day Reports</h3></div><p>Find your strongest setup and most profitable weekdays.</p><div class="demo-mini"><div class="demo-stat">Monday&nbsp; <b>MS1&nbsp; 60%</b><br>Tuesday&nbsp; <b>MS2&nbsp; 70%</b><br>Wednesday&nbsp; <b>JD&nbsp; 65%</b></div></div><button class="demo-btn" data-demo="Setup & Day Reports">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">🧾</span><h3>Trade Entry</h3></div><p>Record trades with planned risk, reward and execution details.</p><div class="demo-mini"><div class="demo-stat">Risk ₹1,000<br>Reward ₹2,000<br>R : R <b>1 : 2</b></div></div><button class="demo-btn" data-demo="Trade Entry">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">📖</span><h3>Trading Journal</h3></div><p>Review, search, edit and manage your saved trades.</p><div class="demo-mini"><div class="demo-stat">26/11&nbsp; MS1&nbsp; <b>+₹2,000</b><br>25/11&nbsp; MS2&nbsp; <span style="color:#ff6875">−₹1,000</span><br>24/11&nbsp; JD&nbsp; <b>+₹750</b></div></div><button class="demo-btn" data-demo="Trading Journal">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">🛡️</span><h3>Rules Checklist</h3></div><p>Check trading discipline and review your execution.</p><div class="demo-mini"><div class="demo-ring">85%</div><div class="demo-stat">SAMPLE<br><b>Discipline</b><br>Score</div></div><button class="demo-btn" data-demo="Rules Checklist">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">📥</span><h3>Excel Export</h3></div><p>Download your trade history for offline analysis.</p><div class="demo-mini"><div style="font-size:32px">📗</div><div class="demo-stat"><b>XLS / XLSX</b><br>Trade records</div></div><button class="demo-btn" data-demo="Excel Export">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">📈</span><h3>Analytics</h3></div><p>Understand P&amp;L trends and compare your markets.</p><div class="demo-mini"><div class="demo-bars"><i style="height:25%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:72%"></i><i style="height:94%"></i></div></div><button class="demo-btn" data-demo="Analytics">View Demo →</button></article>
+    <article class="demo-card"><div class="demo-card-top"><span class="demo-icon">⭐</span><h3>And Much More...</h3></div><p>Multi-market tracking, custom rules and trade editing.</p><div class="demo-mini"><div class="demo-stat">✓ Edit / Delete Trades<br>✓ Custom Rules<br>✓ NIFTY · BTC · GOLD</div></div><button class="demo-btn" data-demo="More Features">View Demo →</button></article>
+  </div>
+  <p class="demo-foot">Start Your Trading Journey with THE JANARAL TRADE Today!</p>
+</section>
+<div class="demo-modal" id="demoModal"><div class="demo-modal-card"><button class="secondary demo-modal-close" id="demoModalClose">✕</button><div class="kicker">SAMPLE PREVIEW</div><h3 id="demoModalTitle">Demo</h3><p id="demoModalText">This is sample information only.</p><small class="muted">यह केवल Demo data है। आपका असली trading data सुरक्षित रहेगा और यहाँ नहीं दिखेगा।</small></div></div>
+
 <section id="app" class="hidden">
 <div class="nav"><button class="active" data-page="dashboard">Dashboard</button><button data-page="entry">Trade Entry</button><button data-page="journal">Trading Journal</button><button data-page="reports">Setup & Day Reports</button><button data-page="rules">Rules Dashboard</button><button data-page="setups">My Setups</button></div>
 <section id="page-dashboard" class="page active"><div class="topline dashboard-heading"><div class="dashboard-title"><div class="kicker">PERFORMANCE OVERVIEW</div><h2>Dashboard</h2></div><div class="field" style="min-width:180px"><label>Market filter</label><select id="dashMarket"><option value="ALL">All Markets</option><option value="INDIAN">Indian Market</option><option value="BITCOIN">Bitcoin</option><option value="GOLD">Gold</option></select></div></div>
@@ -286,4 +319,23 @@ $('authButton').onclick=async()=>{hide('authMessage');if(!client){message('authM
 $('logout').onclick=async()=>{await client.auth.signOut();currentUser=null;trades=[];mySetups=[];hide('app');hide('userBar');show('authBox')};
 (async()=>{if(!window.supabase){message('setupNotice','Login service load nahi hua. Internet check karke page refresh karein.','error');show('setupNotice');return}client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);initDateParts();setDateParts(localISODate());try{const {data,error}=await client.auth.getSession();if(error)throw error;if(data.session)showApp(data.session.user);client.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{hide('app');hide('userBar');show('authBox')}})}catch(err){message('setupNotice','App start nahi ho paya: '+(err.message||err), 'error');show('setupNotice')}})().catch(err=>{const n=document.getElementById('setupNotice');if(n){n.textContent='App mein error aaya: '+(err.message||err);n.classList.remove('hidden');n.classList.add('error')}});
 </script>
+
+<script id="explore-demo-script">
+(()=>{const modal=document.getElementById('demoModal');if(!modal)return;
+const descriptions={
+'Dashboard':'यहाँ Total Trades, Winning Trades, Losing Trades, Win Rate, Net P&L और setup/day-wise charts का sample preview दिखेगा।',
+'Setup & Day Reports':'यहाँ setup-wise performance, weekday-wise best setup और हर setup की holding-time details देखी जा सकती हैं।',
+'Trade Entry':'यहाँ Market, Asset, Setup, Entry/Exit, Quantity, Risk और Reward भरकर trade save किया जा सकता है।',
+'Trading Journal':'यहाँ saved trades की list, search/filter, profit-loss colors, edit और delete विकल्प मिलते हैं।',
+'Rules Checklist':'हर trade के लिए execution checklist और discipline percentage का review sample यहाँ दिखाया गया है।',
+'Excel Export':'Trading Journal से trade records को Excel file में download करने का विकल्प उपलब्ध है।',
+'Analytics':'यहाँ daily P&L trend और Indian Market, Bitcoin तथा Gold की performance compare की जा सकती है।',
+'More Features':'अलग-अलग markets, custom rules, setup colors, trade editing और reports जैसे अतिरिक्त फीचर्स शामिल हैं।'
+};
+document.querySelectorAll('[data-demo]').forEach(btn=>btn.addEventListener('click',()=>{const name=btn.dataset.demo;document.getElementById('demoModalTitle').textContent=name;document.getElementById('demoModalText').textContent=descriptions[name]||'Sample feature preview.';modal.classList.add('open')}));
+document.getElementById('demoModalClose').addEventListener('click',()=>modal.classList.remove('open'));
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
+})();
+</script>
+
 </body></html>
