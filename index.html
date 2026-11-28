@@ -72,6 +72,49 @@ body{background:#0b1726!important}
 .rule-footer>span{font-size:14px;font-weight:700;letter-spacing:.2px}
 .rule-panel .score-pill{padding:10px 17px;border-radius:10px;background:linear-gradient(135deg,#087b59,#159b6d);box-shadow:0 5px 14px #07966833;font-size:15px;letter-spacing:.2px}
 @media(max-width:700px){.rule-panel{padding:16px}.rule-panel .rule-list{grid-template-columns:1fr}.rule-heading h3{font-size:19px}.rule-help{font-size:14px}.rule-panel .rule-item{font-size:15px}.rule-footer{align-items:flex-start;flex-direction:column}.rule-count{font-size:9px}}
+
+
+/* Professional dashboard presentation — visual-only refresh; existing IDs and data logic remain unchanged */
+#page-dashboard{--dash-card:#0d2034;--dash-border:#1d405d;--dash-glow:#13d6a0;padding-bottom:26px}
+#page-dashboard .dashboard-heading{display:flex;align-items:center;justify-content:space-between;text-align:left;gap:20px;padding:24px 26px;margin:0 0 20px;border:1px solid #1d5260;border-radius:18px;background:radial-gradient(ellipse at 82% 0%,#0e8a6c33,transparent 38%),linear-gradient(110deg,#102b43,#0b1b2d 65%,#103c3a);box-shadow:0 14px 36px #0005}
+#page-dashboard .dashboard-title{width:auto;text-align:left}
+#page-dashboard .dashboard-title .kicker{color:#42e5b2;font-size:11px;letter-spacing:2px}
+#page-dashboard .dashboard-title h2{font-size:clamp(24px,3vw,34px);margin:6px 0;color:#f7fbff;text-shadow:none}
+#page-dashboard .dashboard-subtitle{margin:0;color:#a9bfd3;font-size:13px}
+#page-dashboard .dashboard-heading>.field{margin:0;min-width:205px;max-width:230px}
+#page-dashboard .dashboard-heading>.field label{color:#9fb8ce;font-size:11px;text-transform:uppercase;letter-spacing:.8px}
+#page-dashboard .dashboard-heading select{background:#091a2b;border-color:#315673;border-radius:11px}
+#page-dashboard .cards{grid-template-columns:repeat(6,minmax(0,1fr));gap:13px;margin:0 0 18px}
+#page-dashboard .metric{min-height:124px;padding:17px 16px;border:1px solid #234965;border-radius:15px;background:linear-gradient(145deg,#102c45,#0b1c2e)!important;box-shadow:0 10px 26px #0003;transition:transform .18s ease,border-color .18s ease}
+#page-dashboard .metric:hover{transform:translateY(-3px);border-color:#20c99a}
+#page-dashboard .metric:nth-child(2){background:linear-gradient(145deg,#10453d,#0c2b31)!important}
+#page-dashboard .metric:nth-child(3){background:linear-gradient(145deg,#492a3a,#251d30)!important}
+#page-dashboard .metric:nth-child(4){background:linear-gradient(145deg,#2b315b,#17233f)!important}
+#page-dashboard .metric:nth-child(5){background:linear-gradient(145deg,#174b42,#0b302e)!important}
+#page-dashboard .metric:nth-child(6){background:linear-gradient(145deg,#183b54,#12283d)!important}
+#page-dashboard .metric p{display:flex;align-items:center;color:#b9cde0;font-size:11px;font-weight:800;letter-spacing:.65px;text-transform:uppercase;min-height:30px}
+#page-dashboard .metric h2{font-size:clamp(22px,2vw,29px);margin:9px 0 0;line-height:1.15;color:#f7fbff}
+#page-dashboard .metric:nth-child(2) h2,#page-dashboard .metric:nth-child(5) h2{color:#31e4a9}
+#page-dashboard .metric:nth-child(3) h2{color:#ff7782}
+#page-dashboard .metric:nth-child(4) h2{color:#9abaff}
+#page-dashboard .metric-emoji{width:34px;height:34px;display:inline-grid;place-items:center;vertical-align:middle;margin:0 8px 0 0;border-radius:11px;background:#ffffff12;font-size:19px}
+#page-dashboard .discipline-metric small{display:block;margin-top:7px;color:#91abc3;font-size:10px}
+#page-dashboard .chart-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 16px}
+#page-dashboard .chart-panel{padding:20px 21px;border:1px solid #1d405d;border-radius:17px;background:linear-gradient(145deg,#10263d,#0b1b2d 72%);box-shadow:0 12px 30px #0004}
+#page-dashboard .chart-panel:before{height:2px;background:linear-gradient(90deg,#12d99c,#2e9dff,transparent)}
+#page-dashboard .chart-panel h3{display:flex;align-items:center;gap:9px;margin:0 0 6px;font-size:16px;color:#f3f8ff}
+#page-dashboard .chart-panel h3:before{content:'▥';display:inline-grid;place-items:center;width:27px;height:27px;border-radius:8px;background:#10c99520;color:#30e4b0;font-size:18px}
+#page-dashboard .chart-panel p{color:#8faac2;font-size:11px;margin-bottom:14px}
+#page-dashboard .chart-wrap{height:245px}
+#page-dashboard .chart-panel.wide{grid-column:auto}
+#page-dashboard .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:0}
+#page-dashboard .summary-grid>.panel{padding:19px 21px;border:1px solid #1d405d;border-radius:16px;background:linear-gradient(145deg,#10263d,#0b1b2d);box-shadow:0 10px 25px #0003}
+#page-dashboard .summary-grid h3{margin:0 0 9px;font-size:16px}
+#page-dashboard .statline{border-color:#1d3850;padding:12px 0}
+@media(max-width:1100px){#page-dashboard .cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){#page-dashboard .dashboard-heading{align-items:stretch;flex-direction:column;padding:20px}#page-dashboard .dashboard-heading>.field{max-width:none;width:100%}#page-dashboard .chart-grid,#page-dashboard .summary-grid{grid-template-columns:1fr}#page-dashboard .chart-panel.wide{grid-column:auto}}
+@media(max-width:480px){#page-dashboard .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#page-dashboard .metric{padding:13px;min-height:112px}#page-dashboard .metric p{font-size:10px}#page-dashboard .metric-emoji{width:28px;height:28px;font-size:16px;margin-right:5px}#page-dashboard .chart-panel{padding:16px}#page-dashboard .chart-wrap{height:220px}}
+
 </style>
 <style>
 /* Additive mobile safety: keep every existing section and control intact. */
@@ -166,7 +209,7 @@ body{background:#0b1726!important}
 
 <section id="app" class="hidden">
 <div class="nav"><button class="active" data-page="dashboard">Dashboard</button><button data-page="entry">Trade Entry</button><button data-page="journal">Trading Journal</button><button data-page="reports">Setup & Day Reports</button><button data-page="rules">Rules Dashboard</button><button data-page="setups">My Setups</button></div>
-<section id="page-dashboard" class="page active"><div class="topline dashboard-heading"><div class="dashboard-title"><div class="kicker">PERFORMANCE OVERVIEW</div><h2>Dashboard</h2></div><div class="field" style="min-width:180px"><label>Market filter</label><select id="dashMarket"><option value="ALL">All Markets</option><option value="INDIAN">Indian Market</option><option value="BITCOIN">Bitcoin</option><option value="GOLD">Gold</option></select></div></div>
+<section id="page-dashboard" class="page active"><div class="topline dashboard-heading"><div class="dashboard-title"><div class="kicker">PERFORMANCE OVERVIEW</div><h2>Welcome to Your Trading Dashboard</h2><p class="dashboard-subtitle">Track your trades, review your performance and improve your strategy.</p></div><div class="field" style="min-width:180px"><label>Market filter</label><select id="dashMarket"><option value="ALL">All Markets</option><option value="INDIAN">Indian Market</option><option value="BITCOIN">Bitcoin</option><option value="GOLD">Gold</option></select></div></div>
 <div class="cards"><div class="metric"><p><span class="metric-emoji">📊</span> Total Trades</p><h2 id="total">0</h2></div><div class="metric"><p><span class="metric-emoji">🏆</span> Winning Trades</p><h2 id="wins" class="green">0</h2></div><div class="metric"><p><span class="metric-emoji">❌</span> Losing Trades</p><h2 id="losses" class="red">0</h2></div><div class="metric"><p><span class="metric-emoji">🎯</span> Win Rate</p><h2 id="rate">0.0%</h2></div><div class="metric"><p><span class="metric-emoji">💰</span> Net Profit / Loss</p><h2 id="netPnl" class="green">₹0.00</h2></div><div class="metric discipline-metric"><p><span class="metric-emoji">🎯</span> Average Discipline</p><h2 id="dashDiscipline">—</h2><small id="dashReviewed" class="muted">0 reviewed trades</small></div></div>
 <div class="chart-grid"><div class="chart-panel"><h3>Setup-wise Performance</h3><p>Net profit / loss by trading setup</p><div class="chart-wrap"><canvas id="setupChart"></canvas></div></div><div class="chart-panel"><h3>Day-wise Performance</h3><p>Which weekday gives the highest net P&amp;L</p><div class="chart-wrap"><canvas id="dayChart"></canvas></div></div><div class="chart-panel wide"><h3>Daily P&amp;L Trend</h3><p>Daily net result based on saved trades</p><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div><div class="chart-panel wide"><h3>Market Comparison</h3><p>Indian Market, Bitcoin and Gold performance</p><div class="chart-wrap"><canvas id="marketChart"></canvas></div></div></div>
 <div class="summary-grid"><div class="panel"><h3>Market Summary</h3><div id="marketSummary"></div></div><div class="panel"><h3>Recent Performance</h3><div id="recentSummary"></div></div></div></section>
