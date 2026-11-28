@@ -213,6 +213,20 @@ html,body{width:100%;min-height:100%;margin:0}main{width:100%;max-width:none!imp
 @media(max-width:760px){.app-shell{grid-template-columns:1fr}.app-shell>.nav{position:static;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:10px}.app-shell>.nav button{padding:10px;font-size:12px}.app-content{width:100%}#page-dashboard .dashboard-heading{display:block}#page-dashboard .dashboard-filters{margin-top:15px}#page-dashboard .cards{grid-template-columns:repeat(2,minmax(0,1fr))}#page-dashboard .chart-grid,#page-dashboard .summary-grid{grid-template-columns:1fr}#page-dashboard .chart-panel.wide{grid-column:auto}}
 </style>
 
+
+<style id="true-full-width-layout-fix">
+/* Remove legacy left-sidebar offset and use the full available viewport */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+main{width:100%!important;max-width:none!important;margin:0!important;padding:10px 8px!important}
+#app{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;box-sizing:border-box}
+#app .app-shell{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;grid-template-columns:220px minmax(0,1fr)!important;gap:14px!important}
+#app .app-shell>.nav{position:sticky!important;left:auto!important;top:10px!important;width:auto!important;min-width:0!important;margin:0!important}
+#app .app-content{width:100%!important;max-width:none!important;min-width:0!important}
+#page-journal,#page-entry,#page-reports,#page-rules,#page-setups,#page-dashboard{width:100%!important;max-width:none!important}
+#page-journal .wrap{width:100%;max-width:100%;overflow-x:auto}
+@media(max-width:760px){#app .app-shell{grid-template-columns:1fr!important;gap:10px!important}#app .app-shell>.nav{position:static!important;width:100%!important;min-height:0!important}}
+</style>
+
 </head>
 <body>
 <header><div><h1>THE JANARAL TRADE</h1><p>Trading Journal • Performance • Analytics</p></div><div id="userBar" class="hidden profile-bar"><div class="profile-avatar" id="profileAvatar">U</div><div class="profile-info"><strong id="profileName">My Profile</strong><span id="userEmail" class="muted"></span></div><button id="logout" class="secondary">Logout</button></div></header>
